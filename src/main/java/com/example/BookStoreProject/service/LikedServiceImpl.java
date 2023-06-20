@@ -1,0 +1,50 @@
+package com.example.BookStoreProject.service;
+
+import com.example.BookStoreProject.dto.request.LikedDtoRequest;
+import com.example.BookStoreProject.dto.response.LikedDtoResponse;
+import com.example.BookStoreProject.module.Books;
+import com.example.BookStoreProject.module.Liked;
+import com.example.BookStoreProject.module.Users;
+import com.example.BookStoreProject.repository.LikedRepository;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
+import org.springframework.stereotype.Service;
+
+import java.security.Principal;
+import java.time.LocalDateTime;
+
+@Service
+@RequiredArgsConstructor
+@Log4j2
+public class LikedServiceImpl implements LikedService{
+
+    private final UserService userService;
+
+    private final BookService bookService;
+
+    private final LikedRepository likedRepository;
+
+    public Liked save(Liked liked){
+        return likedRepository.save(liked);
+    }
+    @Override
+    public LikedDtoResponse liked(LikedDtoRequest request, Principal principal) {
+        Liked liked = new Liked();
+        try {
+            String email = principal.getName();
+            Users user = userService.getByUserEmail(email).orElseThrow();
+            Books books = bookService.getById(request.getBookId()).orElseThrow();
+            LocalDateTime createdAt = LocalDateTime.now();
+            liked.setBook(books);
+            liked.setUser(user);
+            liked.setCreatedAt(createdAt);
+            this.save(liked);
+        }catch (Exception e){
+            log.error(e.getMessage());
+            throw new RuntimeException("Liked creation exception");
+        }
+        return LikedDtoResponse.builder()
+                .bookId(liked.getBook().getId())
+                .build();
+    }
+}
