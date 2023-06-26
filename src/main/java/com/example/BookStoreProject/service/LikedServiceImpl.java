@@ -1,9 +1,10 @@
 package com.example.BookStoreProject.service;
 
-import com.example.BookStoreProject.dto.request.LikedDtoRequest;
-import com.example.BookStoreProject.dto.response.LikedDtoResponse;
+import com.example.BookStoreProject.dto.request.liked.LikedDtoRequest;
+import com.example.BookStoreProject.dto.response.liked.LikedDtoResponse;
 import com.example.BookStoreProject.module.Books;
 import com.example.BookStoreProject.module.Liked;
+import com.example.BookStoreProject.module.LikedId;
 import com.example.BookStoreProject.module.Users;
 import com.example.BookStoreProject.repository.LikedRepository;
 import lombok.RequiredArgsConstructor;
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import java.security.Principal;
 import java.time.LocalDateTime;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -46,5 +48,17 @@ public class LikedServiceImpl implements LikedService{
         return LikedDtoResponse.builder()
                 .bookId(liked.getBook().getId())
                 .build();
+    }
+
+    @Override
+    public void deleteLikedBook(Principal principal, Long id) {
+        Users users = userService.getByUserEmail(principal.getName()).orElseThrow();
+        Books books = bookService.getById(id).orElseThrow();
+        likedRepository.deleteById(users.getId(),books.getId());
+    }
+
+    @Override
+    public Optional<Liked> getById(LikedId id) {
+        return likedRepository.findById(id);
     }
 }

@@ -37,15 +37,21 @@ public class Orders {
             cascade = {CascadeType.PERSIST,CascadeType.REMOVE})
     private OrderDetails orderDetails;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id",
                 nullable = false,
                 referencedColumnName = "id",
                 foreignKey = @ForeignKey(
-                        name = "user_book_fk"
+                        name = "user_order_fk"
                 )
     )
     private Users user;
+
+    @ManyToOne(cascade = {CascadeType.PERSIST,CascadeType.REMOVE},
+            fetch = FetchType.EAGER)
+    @JoinColumn(name = "book_id",
+            referencedColumnName = "id")
+    private Books book;
 }
 
 

@@ -1,12 +1,14 @@
 package com.example.BookStoreProject.service;
 
-import com.example.BookStoreProject.dto.request.OrderDtoRequest;
-import com.example.BookStoreProject.dto.response.OrderDtoResponse;
+import com.example.BookStoreProject.dto.request.orders.OrderCreationDtoRequest;
+import com.example.BookStoreProject.dto.response.orders.OrderCreationDtoResponse;
+import com.example.BookStoreProject.module.Orders;
 
 import java.security.Principal;
 import java.util.List;
 
 public interface OrderService {
 
-    OrderDtoResponse create(List<OrderDtoRequest> requests, Principal principal);
+    OrderCreationDtoResponse create(List<OrderCreationDtoRequest> requests, Principal principal);
+
 }

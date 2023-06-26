@@ -1,13 +1,11 @@
 package com.example.BookStoreProject.service;
 
-import com.example.BookStoreProject.dto.request.OrderDtoRequest;
-import com.example.BookStoreProject.dto.response.OrderDtoResponse;
-import com.example.BookStoreProject.module.OrderDetails;
+import com.example.BookStoreProject.dto.request.orders.OrderCreationDtoRequest;
+import com.example.BookStoreProject.dto.response.orders.OrderCreationDtoResponse;
 import com.example.BookStoreProject.module.Orders;
 import com.example.BookStoreProject.module.Users;
 import com.example.BookStoreProject.repository.OrdersRepository;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.java.Log;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,9 +19,8 @@ import java.util.List;
 @Log4j2
 public class OrderServiceImpl implements OrderService{
 
-    private final UserService userService;
     private final OrdersRepository ordersRepository;
-
+    private final UserService userService;
     private final OrderDetailService orderDetailService;
 
     private Orders save(Orders order){
@@ -31,7 +28,7 @@ public class OrderServiceImpl implements OrderService{
     }
     @Override
     @Transactional
-    public OrderDtoResponse create(List<OrderDtoRequest> requests, Principal principal) {
+    public OrderCreationDtoResponse create(List<OrderCreationDtoRequest> requests, Principal principal) {
         Orders order = new Orders();
         try {
             LocalDateTime createdAt = LocalDateTime.now();
@@ -46,9 +43,11 @@ public class OrderServiceImpl implements OrderService{
             log.error(e.getMessage());
             throw new RuntimeException("Order creation exception");
         }
-        return OrderDtoResponse.builder()
+        return OrderCreationDtoResponse.builder()
                 .totalPrice(orderDetailService.totalPrice(requests))
                 .build();
 
     }
+
+
 }

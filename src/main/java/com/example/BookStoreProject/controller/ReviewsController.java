@@ -1,14 +1,14 @@
 package com.example.BookStoreProject.controller;
 
-import com.example.BookStoreProject.dto.request.ReviewsDtoRequest;
-import com.example.BookStoreProject.dto.response.ReviewsDtoResponse;
+import com.example.BookStoreProject.dto.request.reviews.ReviewsCreateDtoRequest;
+import com.example.BookStoreProject.dto.request.reviews.ReviewsUpdateDtoRequest;
+import com.example.BookStoreProject.dto.response.reviews.ReviewsCreateDtoResponse;
+import com.example.BookStoreProject.dto.response.reviews.ReviewsUpdateDtoResponse;
 import com.example.BookStoreProject.service.ReviewsService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
 
@@ -19,8 +19,17 @@ public class ReviewsController {
 
     private final ReviewsService reviewsService;
     @PostMapping("/create")
-    public ResponseEntity<ReviewsDtoResponse> create(@RequestBody ReviewsDtoRequest request, Principal principal){
+    public ResponseEntity<ReviewsCreateDtoResponse> createReview(@RequestBody ReviewsCreateDtoRequest request, Principal principal){
         return ResponseEntity.ok(reviewsService.create(request,principal));
+    }
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<HttpStatus> deleteReview(@PathVariable(name = "id") Long bookId,Principal principal){
+        reviewsService.deleteReview(bookId,principal);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+    @PutMapping("/update")
+    public ResponseEntity<ReviewsUpdateDtoResponse> updateReview(@RequestBody ReviewsUpdateDtoRequest request,Principal principal){
+        return ResponseEntity.ok(reviewsService.update(request,principal));
     }
 
 }

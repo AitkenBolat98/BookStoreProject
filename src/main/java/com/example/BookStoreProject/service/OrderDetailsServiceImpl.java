@@ -1,6 +1,6 @@
 package com.example.BookStoreProject.service;
 
-import com.example.BookStoreProject.dto.request.OrderDtoRequest;
+import com.example.BookStoreProject.dto.request.orders.OrderCreationDtoRequest;
 import com.example.BookStoreProject.module.Books;
 import com.example.BookStoreProject.module.OrderDetails;
 import com.example.BookStoreProject.module.Orders;
@@ -26,8 +26,8 @@ public class OrderDetailsServiceImpl implements OrderDetailService{
     }
     @Override
     @Transactional
-    public void create(List<OrderDtoRequest> requests, Orders orders) {
-        for(OrderDtoRequest request:requests){
+    public void create(List<OrderCreationDtoRequest> requests, Orders orders) {
+        for(OrderCreationDtoRequest request:requests){
             OrderDetails orderDetails = new OrderDetails();
             try {
                 Books books = bookService.getById(request.getBookId()).orElseThrow();
@@ -45,9 +45,9 @@ public class OrderDetailsServiceImpl implements OrderDetailService{
     }
 
     @Override
-    public Double totalPrice(List<OrderDtoRequest> requests) {
+    public Double totalPrice(List<OrderCreationDtoRequest> requests) {
         Double totalPrice = 0.0;
-        for(OrderDtoRequest request:requests){
+        for(OrderCreationDtoRequest request:requests){
             Books books = bookService.getById(request.getBookId()).orElseThrow();
             totalPrice += books.getPrice();
         }

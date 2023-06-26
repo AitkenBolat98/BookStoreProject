@@ -1,9 +1,9 @@
-package com.example.BookStoreProject.dto.request;
+package com.example.BookStoreProject.dto.request.orders;
 
 import lombok.Data;
 
 @Data
-public class OrderDtoRequest {
+public class OrderCreationDtoRequest {
 
     private Long bookId;
 

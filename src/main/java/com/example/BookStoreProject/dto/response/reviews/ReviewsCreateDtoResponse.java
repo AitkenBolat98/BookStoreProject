@@ -1,11 +1,11 @@
-package com.example.BookStoreProject.dto.response;
+package com.example.BookStoreProject.dto.response.reviews;
 
 import lombok.Builder;
 import lombok.Data;
 
 @Data
 @Builder
-public class ReviewsDtoResponse {
+public class ReviewsCreateDtoResponse {
 
     private String description;
     private Long bookId;

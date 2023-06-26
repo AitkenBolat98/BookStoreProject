@@ -1,11 +1,16 @@
 package com.example.BookStoreProject.service;
 
-import com.example.BookStoreProject.dto.request.ReviewsDtoRequest;
-import com.example.BookStoreProject.dto.response.ReviewsDtoResponse;
+import com.example.BookStoreProject.dto.request.reviews.ReviewsCreateDtoRequest;
+import com.example.BookStoreProject.dto.request.reviews.ReviewsUpdateDtoRequest;
+import com.example.BookStoreProject.dto.response.reviews.ReviewsCreateDtoResponse;
+import com.example.BookStoreProject.dto.response.reviews.ReviewsUpdateDtoResponse;
 
 import java.security.Principal;
 
 public interface ReviewsService {
 
-    ReviewsDtoResponse create(ReviewsDtoRequest request, Principal principal);
+    ReviewsCreateDtoResponse create(ReviewsCreateDtoRequest request, Principal principal);
+
+    void deleteReview(Long bookId,Principal principal);
+    ReviewsUpdateDtoResponse update(ReviewsUpdateDtoRequest request,Principal principal);
 }

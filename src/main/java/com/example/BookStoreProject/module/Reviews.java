@@ -6,9 +6,10 @@ import lombok.Data;
 import java.time.LocalDateTime;
 
 @Entity(name = "Reviews")
-@Table(name = "reviews")
 @Data
 public class Reviews {
+
+
     @EmbeddedId
     private ReviewsId id = new ReviewsId();
 
@@ -33,7 +34,6 @@ public class Reviews {
             nullable = false,
             columnDefinition = "TEXT")
     private String description;
-
 
 
 }

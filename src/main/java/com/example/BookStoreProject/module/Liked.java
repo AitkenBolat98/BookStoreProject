@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
 @Setter
 public class Liked {
     @EmbeddedId
-    private LikedId id;
+    private LikedId id = new LikedId();
 
     @ManyToOne
     @MapsId("userId")

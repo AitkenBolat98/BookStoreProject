@@ -6,6 +6,7 @@ import com.example.BookStoreProject.dto.response.AuthenticationDtoResponse;
 import com.example.BookStoreProject.dto.response.UserRegistrationDtoResponse;
 import com.example.BookStoreProject.module.Users;
 import com.example.BookStoreProject.repository.UsersRepository;
+import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;

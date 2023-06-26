@@ -1,7 +1,9 @@
 package com.example.BookStoreProject.service;
 
-import com.example.BookStoreProject.dto.request.ReviewsDtoRequest;
-import com.example.BookStoreProject.dto.response.ReviewsDtoResponse;
+import com.example.BookStoreProject.dto.request.reviews.ReviewsCreateDtoRequest;
+import com.example.BookStoreProject.dto.request.reviews.ReviewsUpdateDtoRequest;
+import com.example.BookStoreProject.dto.response.reviews.ReviewsCreateDtoResponse;
+import com.example.BookStoreProject.dto.response.reviews.ReviewsUpdateDtoResponse;
 import com.example.BookStoreProject.module.Books;
 import com.example.BookStoreProject.module.Reviews;
 import com.example.BookStoreProject.module.Users;
@@ -28,7 +30,7 @@ public class ReviewsServiceImpl implements ReviewsService{
     }
 
     @Override
-    public ReviewsDtoResponse create(ReviewsDtoRequest request, Principal principal) {
+    public ReviewsCreateDtoResponse create(ReviewsCreateDtoRequest request, Principal principal) {
         Reviews review = new Reviews();
         try {
             String email = principal.getName();
@@ -44,9 +46,34 @@ public class ReviewsServiceImpl implements ReviewsService{
             log.error(e.getMessage());
             throw new RuntimeException("Review Creation Exception");
         }
-        return ReviewsDtoResponse.builder()
+        return ReviewsCreateDtoResponse.builder()
                 .bookId(review.getBook().getId())
                 .description(review.getDescription())
                 .build();
+    }
+
+    @Override
+    public void deleteReview(Long bookId, Principal principal) {
+
+    }
+
+    @Override
+    public ReviewsUpdateDtoResponse update(ReviewsUpdateDtoRequest request, Principal principal) {
+        Users user = userService.getByUserEmail(principal.getName()).orElseThrow();
+        Books book = bookService.getById(request.getBookId()).orElseThrow();
+        Reviews review = reviewsRepository.updateReview(book.getId(),user.getId());
+        try {
+            LocalDateTime localDateTime = LocalDateTime.now();
+            review.setDescription(request.getDescription());
+            review.setCreatedAt(localDateTime);
+            this.save(review);
+        }catch (Exception e){
+            log.error(e.getMessage());
+            throw new RuntimeException("Review update exception");
+        }
+       return ReviewsUpdateDtoResponse.builder()
+               .bookId(review.getBook().getId())
+               .description(review.getDescription())
+               .build();
     }
 }

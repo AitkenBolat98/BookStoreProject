@@ -3,8 +3,10 @@ package com.example.BookStoreProject.module;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity(name = "Publishers")
@@ -12,6 +14,7 @@ import java.util.List;
 @Getter
 @Setter
 @Data
+@NoArgsConstructor
 public class Publishers {
 
     @Id
@@ -34,10 +37,14 @@ public class Publishers {
     private String description;
 
     @OneToMany(mappedBy = "publisher",
+                fetch = FetchType.EAGER,
                 orphanRemoval = true,
-                cascade = {CascadeType.PERSIST,CascadeType.REMOVE})
-    private List<Books> publisherBooks;
+                cascade = {CascadeType.ALL})
+    private List<Books> publisherBooks = new ArrayList<>();
 
-
-
+    public Publishers(Long id, String name, String description) {
+        this.id = id;
+        this.name = name;
+        this.description = description;
+    }
 }

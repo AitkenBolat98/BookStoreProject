@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
 @Setter
 public class Carts {
     @EmbeddedId
-    private CartId id;
+    private CartId id = new CartId();
 
     @Column(name = "created_at",
             nullable = false,

@@ -40,12 +40,25 @@ public class CartServiceImpl implements CartService {
             carts.setCreatedAt(LocalDateTime.now());
             this.save(carts);
         }catch (Exception e){
-            e.getMessage();
+            log.error(e.getMessage());
             throw new RuntimeException("add to cart");
         }
         return CartAddDtoResponse
                 .builder()
                 .bookId(carts.getBook().getId())
                 .build();
+    }
+
+    @Override
+    public void deleteFromCart(Long bookId, Principal principal) {
+        try{
+            Users user = userService.getByUserEmail(principal.getName()).orElseThrow();
+            Books book = bookService.getById(bookId).orElseThrow();
+            cartRepository.deleteById(user.getId(),book.getId());
+        }catch (Exception e){
+            log.error(e.getMessage());
+            throw new RuntimeException("cart book delete exception");
+        }
+
     }
 }

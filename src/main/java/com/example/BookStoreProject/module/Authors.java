@@ -28,19 +28,21 @@ public class Authors {
     )
     private Long id;
 
-    @Column(name = "first_name",
+    @Column(name = "name",
             nullable = false,
             columnDefinition = "TEXT")
-    private String firstName;
+    private String name;
 
     @Column(name = "description",
             columnDefinition = "TEXT")
     private String description;
 
-    @OneToMany(
+    /*@OneToMany(
             cascade = {CascadeType.PERSIST,CascadeType.REMOVE},
+            fetch = FetchType.EAGER,
             mappedBy = "authors"
     )
-    private List<Books_and_Authors> book = new ArrayList<>();
-
+    private List<Books_and_Authors> book = new ArrayList<>();*/
+    @ManyToMany(mappedBy = "authors",cascade = CascadeType.ALL)
+    private List<Books> books = new ArrayList<>();
 }

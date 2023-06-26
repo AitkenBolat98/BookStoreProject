@@ -53,17 +53,14 @@ public class Users implements UserDetails {
             columnDefinition = "TIMESTAMP WITHOUT TIME ZONE")
     private LocalDateTime createdAt;
 
-    @OneToMany(
-            cascade = {CascadeType.PERSIST,CascadeType.REMOVE},
-            mappedBy = "user"
-    )
+    @OneToMany(mappedBy = "user")
     private List<Reviews> reviews;
 
     @OneToMany(
             cascade = {CascadeType.PERSIST,CascadeType.REMOVE},
             mappedBy = "user"
     )
-    private List<Carts> cart;
+    private List<Carts> cart = new ArrayList<>();
 
     @OneToMany(
             cascade = {CascadeType.PERSIST,CascadeType.REMOVE},
@@ -73,9 +70,11 @@ public class Users implements UserDetails {
 
     @OneToMany(
             cascade = {CascadeType.PERSIST,CascadeType.REMOVE},
+            fetch = FetchType.EAGER,
             mappedBy = "user"
     )
     private List<Orders> orders;
+
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

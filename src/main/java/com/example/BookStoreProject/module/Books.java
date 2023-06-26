@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.aspectj.runtime.reflect.Factory;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,9 +15,18 @@ import java.util.List;
 @Table(name = "books")
 @Getter
 @Setter
-@AllArgsConstructor
 @NoArgsConstructor
 public class Books {
+    public Books(Long id, String title, String genre, Double price, Integer quantity, String language, String description, Publishers publisher) {
+        this.id = id;
+        this.title = title;
+        this.genre = genre;
+        this.price = price;
+        this.quantity = quantity;
+        this.language = language;
+        this.description = description;
+        this.publisher = publisher;
+    }
 
     @Id
     @SequenceGenerator( name = "book_sequence",
@@ -65,17 +75,19 @@ public class Books {
             mappedBy = "book")
     private List<Carts> userAddedBookToCart = new ArrayList<>();
 
+    @OneToMany(mappedBy = "book")
+    private List<Reviews> reviews;
 
-    @OneToMany(cascade = {CascadeType.PERSIST,CascadeType.REMOVE},
-            mappedBy = "book")
-    private List<Reviews> userReviewOfBook = new ArrayList<>();
+    @ManyToMany(cascade = CascadeType.ALL)
+    @JoinTable(name = "BooksAndAuthors"
+                ,joinColumns = {
+            @JoinColumn(name = "book_id")
+    },inverseJoinColumns = {
+            @JoinColumn(name = "author_id")
+    })
+    private List<Authors> authors;
 
-    @OneToMany(cascade = {CascadeType.PERSIST,CascadeType.REMOVE},
-            mappedBy = "book")
-    private List<Books_and_Authors> authors = new ArrayList<>();
-
-    @JsonIgnore
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "publisher_id",
             nullable = false,
             referencedColumnName = "id",
@@ -83,4 +95,8 @@ public class Books {
                     name = "publisher_book_fk"
             ))
     private Publishers publisher;
+    @OneToMany(mappedBy = "book")
+    private List<OrderDetails> orderDetails;
+    @OneToMany(mappedBy = "book")
+    private List<Orders> orders;
 }

@@ -1,14 +1,12 @@
 package com.example.BookStoreProject.controller;
 
-import com.example.BookStoreProject.dto.request.LikedDtoRequest;
-import com.example.BookStoreProject.dto.response.LikedDtoResponse;
+import com.example.BookStoreProject.dto.request.liked.LikedDtoRequest;
+import com.example.BookStoreProject.dto.response.liked.LikedDtoResponse;
 import com.example.BookStoreProject.service.LikedService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
 
@@ -20,7 +18,13 @@ public class LikedController {
     private final LikedService likedService;
 
     @PostMapping("/create")
-    public ResponseEntity<LikedDtoResponse> like(@RequestBody LikedDtoRequest request, Principal principal){
+    public ResponseEntity<LikedDtoResponse> likeBook(@RequestBody LikedDtoRequest request, Principal principal){
         return ResponseEntity.ok(likedService.liked(request,principal));
     }
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<HttpStatus> deleteLikedBook(Principal principal,@PathVariable(name = "id") Long id){
+        likedService.deleteLikedBook(principal,id);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
 }

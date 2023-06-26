@@ -28,7 +28,8 @@ public class BookServiceImpl implements BookService{
     public Set<Books> searchBooks(String query) {
         List<Books> booksTitle = booksRepository.searchBookByTitle(query);
         List<Books> booksGenre = booksRepository.searchBookByGenre(query);
-        Set<Books> books = Stream.of(booksTitle,booksGenre).flatMap(Collection::stream).collect(Collectors.toSet());
+        List<Books> booksAuthor = booksRepository.searchByAuthor(query);
+        Set<Books> books = Stream.of(booksTitle,booksGenre,booksAuthor).flatMap(Collection::stream).collect(Collectors.toSet());
         return books;
     }
 
