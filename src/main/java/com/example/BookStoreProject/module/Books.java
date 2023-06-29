@@ -1,12 +1,9 @@
 package com.example.BookStoreProject.module;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.aspectj.runtime.reflect.Factory;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,14 +14,14 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 public class Books {
-    public Books(Long id, String title, String genre, Double price, Integer quantity, String language, String description, Publishers publisher) {
+    public Books(Long id, String title, String genre, Double price, Integer quantity, String language, String bookDescription, Publishers publisher) {
         this.id = id;
         this.title = title;
         this.genre = genre;
         this.price = price;
         this.quantity = quantity;
         this.language = language;
-        this.description = description;
+        this.bookDescription = bookDescription;
         this.publisher = publisher;
     }
 
@@ -63,9 +60,9 @@ public class Books {
             columnDefinition = "TEXT")
     private String language;
 
-    @Column(name = "description",
+    @Column(name = "book_description",
             columnDefinition = "TEXT")
-    private String description;
+    private String bookDescription;
 
     @OneToMany(cascade = {CascadeType.PERSIST,CascadeType.REMOVE},
             mappedBy = "book")
@@ -79,7 +76,7 @@ public class Books {
     private List<Reviews> reviews;
 
     @ManyToMany(cascade = CascadeType.ALL)
-    @JoinTable(name = "BooksAndAuthors"
+    @JoinTable(name = "books_and_authors"
                 ,joinColumns = {
             @JoinColumn(name = "book_id")
     },inverseJoinColumns = {

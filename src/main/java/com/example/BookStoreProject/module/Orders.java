@@ -1,6 +1,7 @@
 package com.example.BookStoreProject.module;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -52,6 +53,8 @@ public class Orders {
     @JoinColumn(name = "book_id",
             referencedColumnName = "id")
     private Books book;
+
+
 }
 
 

@@ -13,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.security.Principal;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 @RequiredArgsConstructor
 @Service
@@ -28,7 +29,7 @@ public class OrderServiceImpl implements OrderService{
     }
     @Override
     @Transactional
-    public OrderCreationDtoResponse create(List<OrderCreationDtoRequest> requests, Principal principal) {
+    public OrderCreationDtoResponse createOrder(List<OrderCreationDtoRequest> requests, Principal principal) {
         Orders order = new Orders();
         try {
             LocalDateTime createdAt = LocalDateTime.now();
@@ -48,6 +49,23 @@ public class OrderServiceImpl implements OrderService{
                 .build();
 
     }
+
+    @Override
+    public void deleteOrder(Long orderId, Principal principal) {
+        Orders order = this.getById(orderId).orElseThrow();
+        try {
+            ordersRepository.delete(order);
+        }catch (Exception e){
+            log.error(e.getMessage());
+            throw new RuntimeException("Order delete exception");
+        }
+    }
+
+    @Override
+    public Optional<Orders> getById(Long id) {
+        return ordersRepository.findById(id);
+    }
+
 
 
 }

@@ -4,11 +4,15 @@ import com.example.BookStoreProject.dto.request.orders.OrderCreationDtoRequest;
 import com.example.BookStoreProject.dto.response.orders.OrderCreationDtoResponse;
 import com.example.BookStoreProject.module.Orders;
 
+import javax.swing.text.html.Option;
 import java.security.Principal;
 import java.util.List;
+import java.util.Optional;
 
 public interface OrderService {
 
-    OrderCreationDtoResponse create(List<OrderCreationDtoRequest> requests, Principal principal);
+    OrderCreationDtoResponse createOrder(List<OrderCreationDtoRequest> requests, Principal principal);
+    void deleteOrder(Long orderId,Principal principal);
+    Optional<Orders> getById(Long id);
 
 }

@@ -54,6 +54,14 @@ public class ReviewsServiceImpl implements ReviewsService{
 
     @Override
     public void deleteReview(Long bookId, Principal principal) {
+        Users user = userService.getByUserEmail(principal.getName()).orElseThrow();
+        Books book = bookService.getById(bookId).orElseThrow();
+        try {
+            reviewsRepository.deleteReviewById(book.getId(),user.getId());
+        }catch (Exception e){
+            log.error(e.getMessage());
+            throw new RuntimeException("delete review exception");
+        }
 
     }
 

@@ -33,16 +33,16 @@ public class Authors {
             columnDefinition = "TEXT")
     private String name;
 
-    @Column(name = "description",
+    @Column(name = "authors_description",
             columnDefinition = "TEXT")
-    private String description;
+    private String authorDescription;
 
-    /*@OneToMany(
-            cascade = {CascadeType.PERSIST,CascadeType.REMOVE},
-            fetch = FetchType.EAGER,
-            mappedBy = "authors"
-    )
-    private List<Books_and_Authors> book = new ArrayList<>();*/
     @ManyToMany(mappedBy = "authors",cascade = CascadeType.ALL)
     private List<Books> books = new ArrayList<>();
+
+    public Authors(String name, String authorDescription, List<Books> books) {
+        this.name = name;
+        this.authorDescription = authorDescription;
+        this.books = books;
+    }
 }
