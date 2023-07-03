@@ -43,6 +43,12 @@ public class Users implements UserDetails {
             columnDefinition = "TEXT")
     private String password;
 
+    @Column(
+            name = "name",
+            nullable = false,
+            columnDefinition = "TEXT")
+    private String name;
+
     @Column(name = "address",
             nullable = false,
             columnDefinition = "TEXT")
@@ -74,7 +80,10 @@ public class Users implements UserDetails {
             mappedBy = "user"
     )
     private List<Orders> orders;
-
+    @OneToOne(
+            mappedBy = "user"
+    )
+    private ResetPassword resetPassword;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

@@ -1,4 +1,4 @@
-package com.example.BookStoreProject.dto.request;
+package com.example.BookStoreProject.dto.request.authentication;
 
 import lombok.Builder;
 import lombok.Getter;

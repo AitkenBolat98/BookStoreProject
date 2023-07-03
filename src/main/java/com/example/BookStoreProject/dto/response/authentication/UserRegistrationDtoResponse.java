@@ -1,18 +1,17 @@
-package com.example.BookStoreProject.dto.request;
+package com.example.BookStoreProject.dto.response.authentication;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Data
 @AllArgsConstructor
-public class UserRegistrationDtoRequest {
+@NoArgsConstructor
+@Builder
+@Data
+public class UserRegistrationDtoResponse {
 
     private String email;
-
-    private String password;
-
     private String address;
-
+    private String jwt;
 }

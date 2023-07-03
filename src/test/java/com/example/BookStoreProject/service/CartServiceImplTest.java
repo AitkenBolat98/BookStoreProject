@@ -39,7 +39,7 @@ class CartServiceImplTest {
     }
 
     @Test
-    void save(Carts carts) {
+    void save() {
         carts.setCreatedAt(LocalDateTime.now());
         cartRepository.save(carts);
         ArgumentCaptor<Carts> cartsArgumentCaptor = ArgumentCaptor.forClass(Carts.class);
@@ -50,6 +50,5 @@ class CartServiceImplTest {
 
     @Test
     void deleteFromCart() {
-
     }
 }

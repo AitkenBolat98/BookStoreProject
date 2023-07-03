@@ -1,5 +1,7 @@
 package com.example.BookStoreProject.service;
 
+import com.example.BookStoreProject.dto.request.user.UserChangePasswordDtoRequest;
+import com.example.BookStoreProject.dto.response.users.UserChangePasswordDtoResponse;
 import com.example.BookStoreProject.dto.response.users.UserPreviousOrdersDtoResponse;
 import com.example.BookStoreProject.module.Orders;
 import com.example.BookStoreProject.module.Users;
@@ -52,6 +54,11 @@ public class UserServiceImpl implements UserService {
             log.error(e.getMessage());
             throw new RuntimeException("user delete exception");
         }
+    }
+
+    @Override
+    public UserChangePasswordDtoResponse changePassword(UserChangePasswordDtoRequest request) {
+        return null;
     }
 }
 

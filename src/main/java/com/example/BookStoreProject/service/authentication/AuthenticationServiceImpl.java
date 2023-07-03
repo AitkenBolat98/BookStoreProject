@@ -1,12 +1,16 @@
-package com.example.BookStoreProject.service;
+package com.example.BookStoreProject.service.authentication;
 
-import com.example.BookStoreProject.dto.request.AuthenticationDtoRequest;
-import com.example.BookStoreProject.dto.request.UserRegistrationDtoRequest;
-import com.example.BookStoreProject.dto.response.AuthenticationDtoResponse;
-import com.example.BookStoreProject.dto.response.UserRegistrationDtoResponse;
+import com.example.BookStoreProject.dto.request.authentication.AuthenticationDtoRequest;
+import com.example.BookStoreProject.dto.request.authentication.UserPasswordResetDtoRequest;
+import com.example.BookStoreProject.dto.request.authentication.UserRegistrationDtoRequest;
+import com.example.BookStoreProject.dto.response.authentication.AuthenticationDtoResponse;
+import com.example.BookStoreProject.dto.response.authentication.UserPasswordResetDtoResponse;
+import com.example.BookStoreProject.dto.response.authentication.UserRegistrationDtoResponse;
 import com.example.BookStoreProject.module.Users;
 import com.example.BookStoreProject.repository.UsersRepository;
-import lombok.NoArgsConstructor;
+import com.example.BookStoreProject.service.EmailService;
+import com.example.BookStoreProject.service.JWTService;
+import com.example.BookStoreProject.service.authentication.AuthenticationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -14,10 +18,11 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
-public class AuthenticationServiceImpl implements AuthenticationService{
+public class AuthenticationServiceImpl implements AuthenticationService {
 
     private final UsersRepository usersRepository;
 
@@ -25,9 +30,11 @@ public class AuthenticationServiceImpl implements AuthenticationService{
 
     private final BCryptPasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
+    private final EmailService emailService;
     public Users save(Users user){
         return usersRepository.save(user);
     }
+
     @Override
     public UserRegistrationDtoResponse registration(UserRegistrationDtoRequest request) {
         var user = Users.builder()
@@ -61,6 +68,7 @@ public class AuthenticationServiceImpl implements AuthenticationService{
                 .jwt(jwtToken)
                 .build();
     }
+
 
 
 }
