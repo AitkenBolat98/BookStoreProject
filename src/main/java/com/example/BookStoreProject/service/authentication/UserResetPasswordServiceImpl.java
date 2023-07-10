@@ -9,7 +9,10 @@ import com.example.BookStoreProject.service.EmailService;
 import com.example.BookStoreProject.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
@@ -18,9 +21,9 @@ import static org.apache.catalina.util.RequestUtil.getRequestURL;
 
 @RequiredArgsConstructor
 @Log4j2
+@Service
 public class UserResetPasswordServiceImpl implements UserResetPasswordService{
     private final UserService userService;
-    private final JavaMailSender mailSender;
     private final EmailService emailService;
     private final UserResetPasswordRepository userResetPasswordRepository;
     public ResetPassword save(ResetPassword instance){
@@ -30,11 +33,13 @@ public class UserResetPasswordServiceImpl implements UserResetPasswordService{
     public UserPasswordResetDtoResponse resetPassword(UserPasswordResetDtoRequest request) {
         Users user = userService.getByUserEmail(request.getEmail()).orElseThrow();
         String token = UUID.randomUUID().toString();
-        String url = "http://localhost:8080/api/v1/auth/user/changePassword=" + token;
+        String url = "http://localhost:8080/api/v1/auth/user/changePassword?token=" + token;
         this.createPasswordResetToken(user,token);
         emailService.sendEmail(user.getEmail(),"Password Reset",
                 "Hello " + user.getName() + " click the link to reset your password " + url);
-        return UserPasswordResetDtoResponse.builder().build();
+        return UserPasswordResetDtoResponse.builder()
+                .message("Please follow the link in the email")
+                .build();
     }
     public void createPasswordResetToken(Users user,String token){
         ResetPassword userToken = new ResetPassword();
@@ -50,7 +55,7 @@ public class UserResetPasswordServiceImpl implements UserResetPasswordService{
     public boolean isValid(String token){
         LocalDateTime currentDate = LocalDateTime.now();
         ResetPassword userToken = this.getByToken(token);
-        if(currentDate.isBefore(userToken.getExpirationDate()) && userToken.getToken() == token){
+        if(currentDate.isBefore(userToken.getExpirationDate()) && userToken.getToken().equals(token)){
             return true;
         }else{
             return false;

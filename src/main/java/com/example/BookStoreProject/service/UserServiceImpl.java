@@ -4,10 +4,15 @@ import com.example.BookStoreProject.dto.request.user.UserChangePasswordDtoReques
 import com.example.BookStoreProject.dto.response.users.UserChangePasswordDtoResponse;
 import com.example.BookStoreProject.dto.response.users.UserPreviousOrdersDtoResponse;
 import com.example.BookStoreProject.module.Orders;
+import com.example.BookStoreProject.module.ResetPassword;
 import com.example.BookStoreProject.module.Users;
+import com.example.BookStoreProject.repository.UserResetPasswordRepository;
 import com.example.BookStoreProject.repository.UsersRepository;
+import com.example.BookStoreProject.service.authentication.UserResetPasswordService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.context.annotation.Lazy;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.security.Principal;
@@ -20,6 +25,9 @@ import java.util.Optional;
 public class UserServiceImpl implements UserService {
 
     private final UsersRepository usersRepository;
+    private final UserResetPasswordRepository userResetPasswordRepository;
+
+    private final BCryptPasswordEncoder encoder;
 
 
     @Override
@@ -56,9 +64,21 @@ public class UserServiceImpl implements UserService {
         }
     }
 
+
     @Override
-    public UserChangePasswordDtoResponse changePassword(UserChangePasswordDtoRequest request) {
-        return null;
+    public void changePassword(UserChangePasswordDtoRequest request, String token) {
+        ResetPassword resetPassword = userResetPasswordRepository.findByToken(token);
+        Users user = resetPassword.getUser();
+        if(user != null){
+            user.setPassword(encoder.encode(request.getNewPassword()));
+            this.save(user);
+        }else{
+            throw new RuntimeException("User not found");
+        }
+
+    }
+    public Users save(Users user){
+        return usersRepository.save(user);
     }
 }
 

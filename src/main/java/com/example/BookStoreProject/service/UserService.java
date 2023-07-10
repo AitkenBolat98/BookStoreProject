@@ -17,6 +17,6 @@ public interface UserService {
     UserPreviousOrdersDtoResponse previousOrders(Principal principal);
 
     void deleteUser(Principal principal);
-    UserChangePasswordDtoResponse changePassword(UserChangePasswordDtoRequest request);
+    void changePassword(UserChangePasswordDtoRequest request, String token);
 
 }

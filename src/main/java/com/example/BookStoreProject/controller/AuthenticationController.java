@@ -21,8 +21,8 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("api/v1/auth")
 public class AuthenticationController {
 
-    public final AuthenticationService authenticationService;
-    public final UserResetPasswordService userResetPasswordService;
+    private final AuthenticationService authenticationService;
+    private final UserResetPasswordService userResetPasswordService;
     @PostMapping("/registration")
     public ResponseEntity<UserRegistrationDtoResponse> registration(@RequestBody @Valid UserRegistrationDtoRequest request){
         return ResponseEntity.ok(authenticationService.registration(request));

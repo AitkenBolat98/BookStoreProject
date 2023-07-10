@@ -14,6 +14,8 @@ public class UserRegistrationDtoRequest {
     private String email;
     @ValidPassword
     private String password;
+    @NotNull
+    private String name;
 
     private String address;
 

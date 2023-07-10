@@ -15,7 +15,7 @@ import java.security.Principal;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/v1/user")
+@RequestMapping("/api/v1/auth/user")
 public class UserController {
 
     public final UserService userService;
@@ -30,13 +30,14 @@ public class UserController {
         userService.deleteUser(principal);
         return new ResponseEntity<>(HttpStatus.OK);
     }
-    @PostMapping("/changePassword")
-    public ResponseEntity<HttpStatus> changePassword(@RequestParam("token") String token, @Valid UserChangePasswordDtoRequest request){
+    @PostMapping("/changepassword")
+    public ResponseEntity<HttpStatus> changePassword(@RequestParam(name = "token",defaultValue = "1") String token, @RequestBody @Valid UserChangePasswordDtoRequest request){
         boolean result = userResetPasswordService.isValid(token);
         if(result == true){
+            userService.changePassword(request,token);
             return new ResponseEntity<>(HttpStatus.OK);
         }else {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            throw new RuntimeException("token is not valid");
         }
     }
 }

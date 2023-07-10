@@ -9,5 +9,5 @@ import lombok.Setter;
 @Setter
 public class UserPasswordResetDtoResponse {
 
-    private String message = "Check the link in your email";
+    private String message;
 }

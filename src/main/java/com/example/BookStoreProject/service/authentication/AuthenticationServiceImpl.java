@@ -30,7 +30,6 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
     private final BCryptPasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
-    private final EmailService emailService;
     public Users save(Users user){
         return usersRepository.save(user);
     }
@@ -42,6 +41,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
                 .password(passwordEncoder.encode(request.getPassword()))
                 .address(request.getAddress())
                 .createdAt(LocalDateTime.now())
+                .name(request.getName())
                 .build();
         this.save(user);
         var jwtToken = jwtService.generateToken(user);
