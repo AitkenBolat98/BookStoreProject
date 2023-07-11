@@ -9,6 +9,5 @@ import lombok.Setter;
 @Builder
 public class AuthenticationDtoResponse {
 
-    private String email;
     private String jwt;
 }

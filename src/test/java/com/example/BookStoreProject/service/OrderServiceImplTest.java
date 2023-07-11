@@ -3,7 +3,7 @@ package com.example.BookStoreProject.service;
 import com.example.BookStoreProject.dto.request.orders.OrderCreationDtoRequest;
 import com.example.BookStoreProject.module.Orders;
 import com.example.BookStoreProject.repository.OrdersRepository;
-import com.example.BookStoreProject.service.authentication.AuthenticationService;
+import com.example.BookStoreProject.service.authentication.RegistrationService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -28,7 +28,7 @@ class OrderServiceImplTest {
     @Mock
     private UserService userService;
     @Mock
-    private AuthenticationService authenticationService;
+    private RegistrationService registrationService;
     @Mock
     private OrderDetailService orderDetailService;
     @Mock
@@ -44,7 +44,7 @@ class OrderServiceImplTest {
     @Test
     void deleteOrder(){
 /*
-        authenticationService.registration()
+        registrationService.registration()
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         undertest.deleteOrder(order.getId(),authentication);
         ArgumentCaptor<Orders> ordersArgumentCaptor = ArgumentCaptor.forClass(Orders.class);

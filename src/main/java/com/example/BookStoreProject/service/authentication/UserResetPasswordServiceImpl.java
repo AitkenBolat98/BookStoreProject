@@ -33,7 +33,7 @@ public class UserResetPasswordServiceImpl implements UserResetPasswordService{
     public UserPasswordResetDtoResponse resetPassword(UserPasswordResetDtoRequest request) {
         Users user = userService.getByUserEmail(request.getEmail()).orElseThrow();
         String token = UUID.randomUUID().toString();
-        String url = "http://localhost:8080/api/v1/auth/user/changePassword?token=" + token;
+        String url = "http://localhost:8080/api/v1/auth/user/changepassword?token=" + token;
         this.createPasswordResetToken(user,token);
         emailService.sendEmail(user.getEmail(),"Password Reset",
                 "Hello " + user.getName() + " click the link to reset your password " + url);

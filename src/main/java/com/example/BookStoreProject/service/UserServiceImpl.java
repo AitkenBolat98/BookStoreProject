@@ -1,5 +1,7 @@
 package com.example.BookStoreProject.service;
 
+import com.example.BookStoreProject.dto.request.user.UserChangeAddressRequest;
+import com.example.BookStoreProject.dto.request.user.UserChangeEmailDtoRequest;
 import com.example.BookStoreProject.dto.request.user.UserChangePasswordDtoRequest;
 import com.example.BookStoreProject.dto.response.users.UserChangePasswordDtoResponse;
 import com.example.BookStoreProject.dto.response.users.UserPreviousOrdersDtoResponse;
@@ -12,6 +14,7 @@ import com.example.BookStoreProject.service.authentication.UserResetPasswordServ
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.context.annotation.Lazy;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -63,22 +66,34 @@ public class UserServiceImpl implements UserService {
             throw new RuntimeException("user delete exception");
         }
     }
-
-
     @Override
-    public void changePassword(UserChangePasswordDtoRequest request, String token) {
-        ResetPassword resetPassword = userResetPasswordRepository.findByToken(token);
-        Users user = resetPassword.getUser();
-        if(user != null){
-            user.setPassword(encoder.encode(request.getNewPassword()));
-            this.save(user);
-        }else{
-            throw new RuntimeException("User not found");
-        }
-
-    }
     public Users save(Users user){
         return usersRepository.save(user);
+    }
+
+    @Override
+    public void changeUserEmail(Principal principal, UserChangeEmailDtoRequest request) {
+        Users user = this.getByUserEmail(principal.getName()).orElseThrow(()->
+                new UsernameNotFoundException("Username not found"));
+        try {
+            user.setEmail(request.getNewEmail());
+            this.save(user);
+        }catch (Exception e){
+            log.error(e.getMessage());
+            throw new RuntimeException("User email change exception");
+        }
+    }
+
+    @Override
+    public void changeUserAddress(Principal principal, UserChangeAddressRequest request) {
+        Users user = this.getByUserEmail(principal.getName()).orElseThrow(()->new UsernameNotFoundException("user not found"));
+        try {
+            user.setAddress(request.getNewAddress());
+            this.save(user);
+        }catch (Exception e){
+            log.error(e.getMessage());
+            throw new RuntimeException("User change address Exception");
+        }
     }
 }
 

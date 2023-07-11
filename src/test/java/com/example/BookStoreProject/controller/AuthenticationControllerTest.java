@@ -1,8 +1,8 @@
 package com.example.BookStoreProject.controller;
 
 import com.example.BookStoreProject.repository.UsersRepository;
-import com.example.BookStoreProject.service.authentication.AuthenticationService;
-import com.example.BookStoreProject.service.authentication.AuthenticationServiceImpl;
+import com.example.BookStoreProject.service.authentication.RegistrationService;
+import com.example.BookStoreProject.service.authentication.RegistrationServiceImpl;
 import com.example.BookStoreProject.service.JWTService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
@@ -26,7 +26,7 @@ class AuthenticationControllerTest {
     @Autowired
     ObjectMapper objectMapper;
     @MockBean
-    AuthenticationService authenticationService;
+    RegistrationService registrationService;
     @MockBean
     UsersRepository usersRepository;
     @MockBean
@@ -35,8 +35,8 @@ class AuthenticationControllerTest {
     AuthenticationManager authenticationManager;
     @MockBean
     BCryptPasswordEncoder bCryptPasswordEncoder;
-    AuthenticationServiceImpl authenticationServiceImpl = new
-            AuthenticationServiceImpl(usersRepository,jwtService,bCryptPasswordEncoder,authenticationManager);
+    RegistrationServiceImpl registrationServiceImpl = new
+            RegistrationServiceImpl(usersRepository,jwtService,bCryptPasswordEncoder,authenticationManager);
 
     @Test
     void registration() throws Exception {

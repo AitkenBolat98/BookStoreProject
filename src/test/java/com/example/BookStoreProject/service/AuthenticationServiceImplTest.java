@@ -3,7 +3,7 @@ package com.example.BookStoreProject.service;
 import com.example.BookStoreProject.dto.request.authentication.UserRegistrationDtoRequest;
 import com.example.BookStoreProject.module.Users;
 import com.example.BookStoreProject.repository.UsersRepository;
-import com.example.BookStoreProject.service.authentication.AuthenticationServiceImpl;
+import com.example.BookStoreProject.service.authentication.RegistrationServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -20,7 +20,7 @@ import static org.mockito.Mockito.verify;
 @ExtendWith(MockitoExtension.class)
 class AuthenticationServiceImplTest {
 
-    private AuthenticationServiceImpl underTest;
+    private RegistrationServiceImpl underTest;
     @Mock
     private BCryptPasswordEncoder passwordEncoder;
     @Mock
@@ -35,7 +35,7 @@ class AuthenticationServiceImplTest {
     private Users user;
    @BeforeEach
     void setUp() {
-       underTest = new AuthenticationServiceImpl(usersRepository, jwtService, passwordEncoder, authenticationManager);
+       underTest = new RegistrationServiceImpl(usersRepository, jwtService, passwordEncoder, authenticationManager);
    }
     @Test
     void canSave(){

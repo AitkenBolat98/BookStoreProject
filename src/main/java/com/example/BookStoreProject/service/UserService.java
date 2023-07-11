@@ -1,7 +1,7 @@
 package com.example.BookStoreProject.service;
 
-import com.example.BookStoreProject.dto.request.user.UserChangePasswordDtoRequest;
-import com.example.BookStoreProject.dto.response.users.UserChangePasswordDtoResponse;
+import com.example.BookStoreProject.dto.request.user.UserChangeAddressRequest;
+import com.example.BookStoreProject.dto.request.user.UserChangeEmailDtoRequest;
 import com.example.BookStoreProject.dto.response.users.UserPreviousOrdersDtoResponse;
 import com.example.BookStoreProject.module.Users;
 
@@ -17,6 +17,7 @@ public interface UserService {
     UserPreviousOrdersDtoResponse previousOrders(Principal principal);
 
     void deleteUser(Principal principal);
-    void changePassword(UserChangePasswordDtoRequest request, String token);
-
+    Users save(Users user);
+    void changeUserEmail(Principal principal, UserChangeEmailDtoRequest request);
+    void changeUserAddress(Principal principal, UserChangeAddressRequest request);
 }
