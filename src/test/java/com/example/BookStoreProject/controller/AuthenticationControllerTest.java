@@ -1,8 +1,6 @@
 package com.example.BookStoreProject.controller;
 
 import com.example.BookStoreProject.repository.UsersRepository;
-import com.example.BookStoreProject.service.authentication.RegistrationService;
-import com.example.BookStoreProject.service.authentication.RegistrationServiceImpl;
 import com.example.BookStoreProject.service.JWTService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;

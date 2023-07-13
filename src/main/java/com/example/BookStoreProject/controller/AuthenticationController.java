@@ -1,6 +1,5 @@
 package com.example.BookStoreProject.controller;
 
-import com.example.BookStoreProject.configuration.ProjectAuthenticationProvider;
 import com.example.BookStoreProject.dto.request.authentication.AuthenticationDtoRequest;
 import com.example.BookStoreProject.dto.request.authentication.UserPasswordResetDtoRequest;
 import com.example.BookStoreProject.dto.request.authentication.UserRegistrationDtoRequest;
@@ -8,16 +7,12 @@ import com.example.BookStoreProject.dto.request.user.UserChangePasswordDtoReques
 import com.example.BookStoreProject.dto.response.authentication.AuthenticationDtoResponse;
 import com.example.BookStoreProject.dto.response.authentication.UserPasswordResetDtoResponse;
 import com.example.BookStoreProject.dto.response.authentication.UserRegistrationDtoResponse;
-import com.example.BookStoreProject.module.Users;
 import com.example.BookStoreProject.service.authentication.AuthenticationService;
-import com.example.BookStoreProject.service.authentication.RegistrationService;
 import com.example.BookStoreProject.service.authentication.UserResetPasswordService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -25,13 +20,12 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("api/v1/auth")
 public class AuthenticationController {
 
-    private final RegistrationService registrationService;
     private final UserResetPasswordService userResetPasswordService;
     private final AuthenticationService authenticationService;
 
     @PostMapping("/registration")
     public ResponseEntity<UserRegistrationDtoResponse> registration(@RequestBody @Valid UserRegistrationDtoRequest request){
-        return ResponseEntity.ok(registrationService.registration(request));
+        return ResponseEntity.ok(authenticationService.registration(request));
     }
     @PostMapping("/authenticate")
     public ResponseEntity<AuthenticationDtoResponse> authenticate(@RequestBody AuthenticationDtoRequest request){

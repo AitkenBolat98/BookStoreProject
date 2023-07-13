@@ -21,8 +21,7 @@ public class OrderDetails {
             updatable = false)
     private Long id;
 
-    @OneToOne(cascade = CascadeType.ALL,
-              fetch = FetchType.EAGER)
+    @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "order_id",
                 referencedColumnName = "id")
     private Orders order;
@@ -37,8 +36,7 @@ public class OrderDetails {
             columnDefinition = "BIGINT")
     private Integer quantity;
 
-    @ManyToOne(cascade = {CascadeType.PERSIST,CascadeType.REMOVE},
-                fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "book_id",
                 referencedColumnName = "id")
     private Books book;

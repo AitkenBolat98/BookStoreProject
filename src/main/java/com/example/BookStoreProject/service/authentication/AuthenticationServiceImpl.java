@@ -1,10 +1,15 @@
 package com.example.BookStoreProject.service.authentication;
 
+import com.example.BookStoreProject.constants.TokenType;
 import com.example.BookStoreProject.dto.request.authentication.AuthenticationDtoRequest;
+import com.example.BookStoreProject.dto.request.authentication.UserRegistrationDtoRequest;
 import com.example.BookStoreProject.dto.request.user.UserChangePasswordDtoRequest;
 import com.example.BookStoreProject.dto.response.authentication.AuthenticationDtoResponse;
+import com.example.BookStoreProject.dto.response.authentication.UserRegistrationDtoResponse;
 import com.example.BookStoreProject.module.ResetPassword;
+import com.example.BookStoreProject.module.Token;
 import com.example.BookStoreProject.module.Users;
+import com.example.BookStoreProject.repository.UsersRepository;
 import com.example.BookStoreProject.service.JWTService;
 import com.example.BookStoreProject.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -19,16 +24,22 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+
 @Service
 @RequiredArgsConstructor
 @Log4j2
 public class AuthenticationServiceImpl implements AuthenticationService{
     @Autowired
     private AuthenticationManager authenticationManager;
+    private final UsersRepository usersRepository;
     private final BCryptPasswordEncoder passwordEncoder;
     private final UserService userService;
     private final UserResetPasswordService userResetPasswordService;
     private final JWTService jwtService;
+    public Users save(Users user){
+        return usersRepository.save(user);
+    }
     @Override
     public AuthenticationDtoResponse authenticate(AuthenticationDtoRequest request) {
         Authentication authObject;
@@ -40,9 +51,30 @@ public class AuthenticationServiceImpl implements AuthenticationService{
             log.error(e.getMessage());
             throw new BadCredentialsException("Credentials Invalid");
         }
-        String jwtToken = this.jwtToken(request);
+        Users user = userService.getByUserEmail(request.getEmail()).orElseThrow();
+        String jwtToken = jwtService.generateToken(user);
+        jwtService.revokeAllUserTokens(user);
+        saveUserToken(user,jwtToken);
         return AuthenticationDtoResponse
                 .builder()
+                .jwt(jwtToken)
+                .build();
+    }
+    @Override
+    public UserRegistrationDtoResponse registration(UserRegistrationDtoRequest request) {
+        var user = Users.builder()
+                .email(request.getEmail())
+                .password(passwordEncoder.encode(request.getPassword()))
+                .address(request.getAddress())
+                .createdAt(LocalDateTime.now())
+                .name(request.getName())
+                .build();
+        var savedUser = save(user);
+        var jwtToken = jwtService.generateToken(user);
+        saveUserToken(savedUser,jwtToken);
+        return UserRegistrationDtoResponse.builder()
+                .email(user.getEmail())
+                .address(user.getAddress())
                 .jwt(jwtToken)
                 .build();
     }
@@ -57,10 +89,14 @@ public class AuthenticationServiceImpl implements AuthenticationService{
             throw new RuntimeException("User not found");
         }
     }
-    public String jwtToken(AuthenticationDtoRequest request){
-        Users user = userService.getByUserEmail(request.getEmail())
-                .orElseThrow(()-> new UsernameNotFoundException("User not found"));
-        var jwt = jwtService.generateToken(user);
-        return jwt;
+    private void saveUserToken(Users savedUser,String jwtToken){
+        var token = Token.builder()
+                .user(savedUser)
+                .token(jwtToken)
+                .tokenType(TokenType.BEARER)
+                .expired(false)
+                .revoked(false)
+                .build();
+        jwtService.save(token);
     }
 }

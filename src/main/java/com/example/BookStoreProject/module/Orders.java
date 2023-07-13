@@ -48,8 +48,7 @@ public class Orders {
     )
     private Users user;
 
-    @ManyToOne(cascade = {CascadeType.PERSIST,CascadeType.REMOVE},
-            fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "book_id",
             referencedColumnName = "id")
     private Books book;

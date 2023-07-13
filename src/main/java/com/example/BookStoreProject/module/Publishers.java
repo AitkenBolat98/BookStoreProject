@@ -38,8 +38,7 @@ public class Publishers {
 
     @OneToMany(mappedBy = "publisher",
                 fetch = FetchType.EAGER,
-                orphanRemoval = true,
-                cascade = {CascadeType.ALL})
+                orphanRemoval = true)
     private List<Books> publisherBooks = new ArrayList<>();
 
     public Publishers(Long id, String name, String description) {

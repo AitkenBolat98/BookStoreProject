@@ -1,11 +1,15 @@
 package com.example.BookStoreProject.service;
 
 import com.example.BookStoreProject.constants.SecurityConstants;
+import com.example.BookStoreProject.module.Token;
+import com.example.BookStoreProject.module.Users;
+import com.example.BookStoreProject.repository.TokenRepository;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
@@ -13,13 +17,37 @@ import java.security.Key;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 import java.util.function.Function;
 
 @Service
+@RequiredArgsConstructor
 public class JWTServiceImpl implements JWTService{
+    private final TokenRepository tokenRepository;
 
     public Claims extractAllClaims(String token){
         return Jwts.parserBuilder().setSigningKey(getSignInKey()).build().parseClaimsJws(token).getBody();
+    }
+    @Override
+    public Token save(Token token){
+        return tokenRepository.save(token);
+    }
+    @Override
+    public void revokeAllUserTokens(Users user){
+        var ValidUserTokens = tokenRepository.findAllValidTokensByUser(user.getId());
+        if(ValidUserTokens.isEmpty()){
+            return;
+        }
+        ValidUserTokens.forEach(token -> {
+            token.setExpired(true);
+            token.setRevoked(true);
+        });
+        tokenRepository.saveAll(ValidUserTokens);
+    }
+
+    @Override
+    public Optional<Token> getByToken(String token) {
+        return tokenRepository.findByToken(token);
     }
 
     @Override

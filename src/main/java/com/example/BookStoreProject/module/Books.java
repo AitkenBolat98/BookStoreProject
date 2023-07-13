@@ -64,18 +64,16 @@ public class Books {
             columnDefinition = "TEXT")
     private String bookDescription;
 
-    @OneToMany(cascade = {CascadeType.PERSIST,CascadeType.REMOVE},
-            mappedBy = "book")
+    @OneToMany(mappedBy = "book")
     private List<Liked> userLikedBook = new ArrayList<>();
 
-    @OneToMany(cascade = {CascadeType.PERSIST,CascadeType.REMOVE},
-            mappedBy = "book")
+    @OneToMany(mappedBy = "book")
     private List<Carts> userAddedBookToCart = new ArrayList<>();
 
     @OneToMany(mappedBy = "book")
     private List<Reviews> reviews;
 
-    @ManyToMany(cascade = CascadeType.ALL)
+    @ManyToMany
     @JoinTable(name = "books_and_authors"
                 ,joinColumns = {
             @JoinColumn(name = "book_id")
