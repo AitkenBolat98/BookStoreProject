@@ -1,12 +1,16 @@
 package com.example.BookStoreProject.module;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
 @Entity(name = "Reviews")
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class Reviews {
 
 

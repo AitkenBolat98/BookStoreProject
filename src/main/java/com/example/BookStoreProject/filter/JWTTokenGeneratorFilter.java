@@ -44,7 +44,7 @@ public class JWTTokenGeneratorFilter extends OncePerRequestFilter {
         userEmail = jwtService.extractUsername(jwt);
         if(userEmail != null && SecurityContextHolder.getContext().getAuthentication() == null){
             UserDetails userDetails = this.userDetailsService.loadUserByUsername(userEmail);
-            var isTokenValid = jwtService.getByToken(jwt).map(t -> !t.isExpired() && t.isRevoked())
+            var isTokenValid = jwtService.getByToken(jwt).map(t -> !t.isExpired() && !t.isRevoked())
                     .orElse(false);
             if(jwtService.isTokenValid(jwt,userDetails) && isTokenValid){
                 UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(

@@ -1,7 +1,9 @@
 package com.example.BookStoreProject.module;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 
@@ -9,6 +11,8 @@ import lombok.Setter;
 @Table(name = "order_details")
 @Getter
 @Setter
+@AllArgsConstructor
+@NoArgsConstructor
 public class OrderDetails {
 
     @Id
@@ -21,7 +25,8 @@ public class OrderDetails {
             updatable = false)
     private Long id;
 
-    @OneToOne(fetch = FetchType.EAGER)
+    @OneToOne(fetch = FetchType.EAGER,
+                cascade = {CascadeType.PERSIST,CascadeType.REMOVE})
     @JoinColumn(name = "order_id",
                 referencedColumnName = "id")
     private Orders order;
@@ -36,7 +41,7 @@ public class OrderDetails {
             columnDefinition = "BIGINT")
     private Integer quantity;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(/*fetch = FetchType.EAGER*/)
     @JoinColumn(name = "book_id",
                 referencedColumnName = "id")
     private Books book;

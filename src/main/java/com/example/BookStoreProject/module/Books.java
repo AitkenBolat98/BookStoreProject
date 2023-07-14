@@ -1,6 +1,7 @@
 package com.example.BookStoreProject.module;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -12,18 +13,9 @@ import java.util.List;
 @Table(name = "books")
 @Getter
 @Setter
+@AllArgsConstructor
 @NoArgsConstructor
 public class Books {
-    public Books(Long id, String title, String genre, Double price, Integer quantity, String language, String bookDescription, Publishers publisher) {
-        this.id = id;
-        this.title = title;
-        this.genre = genre;
-        this.price = price;
-        this.quantity = quantity;
-        this.language = language;
-        this.bookDescription = bookDescription;
-        this.publisher = publisher;
-    }
 
     @Id
     @SequenceGenerator( name = "book_sequence",
@@ -72,17 +64,11 @@ public class Books {
 
     @OneToMany(mappedBy = "book")
     private List<Reviews> reviews;
+    @OneToMany(cascade = CascadeType.ALL,
+                mappedBy = "books")
+    private List<BooksAndAuthors> booksAndAuthors = new ArrayList<>();
 
-    @ManyToMany
-    @JoinTable(name = "books_and_authors"
-                ,joinColumns = {
-            @JoinColumn(name = "book_id")
-    },inverseJoinColumns = {
-            @JoinColumn(name = "author_id")
-    })
-    private List<Authors> authors;
-
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(/*fetch = FetchType.LAZY*/)
     @JoinColumn(name = "publisher_id",
             nullable = false,
             referencedColumnName = "id",

@@ -89,7 +89,7 @@ public class Users implements UserDetails {
             cascade = {CascadeType.PERSIST,CascadeType.REMOVE},
             mappedBy = "user"
     )
-    private List<Token> tokens;
+    private List<Token> tokens = new ArrayList<>();
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

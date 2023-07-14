@@ -18,8 +18,9 @@ public class LikedController {
     private final LikedService likedService;
 
     @PostMapping("/create")
-    public ResponseEntity<LikedDtoResponse> likeBook(@RequestBody LikedDtoRequest request, Principal principal){
-        return ResponseEntity.ok(likedService.liked(request,principal));
+    public ResponseEntity<HttpStatus> likeBook(@RequestBody LikedDtoRequest request, Principal principal){
+        likedService.liked(request,principal);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<HttpStatus> deleteLikedBook(Principal principal,@PathVariable(name = "id") Long id){

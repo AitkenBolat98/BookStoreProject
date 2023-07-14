@@ -1,10 +1,7 @@
 package com.example.BookStoreProject.module;
 
 import jakarta.persistence.*;
-import lombok.Data;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,6 +12,7 @@ import java.util.List;
 @Setter
 @Data
 @NoArgsConstructor
+@AllArgsConstructor
 public class Publishers {
 
     @Id
@@ -36,14 +34,9 @@ public class Publishers {
             columnDefinition = "TEXT")
     private String description;
 
-    @OneToMany(mappedBy = "publisher",
-                fetch = FetchType.EAGER,
-                orphanRemoval = true)
+    @OneToMany(mappedBy = "publisher"
+                /*fetch = FetchType.EAGER,
+                orphanRemoval = true*/)
     private List<Books> publisherBooks = new ArrayList<>();
 
-    public Publishers(Long id, String name, String description) {
-        this.id = id;
-        this.name = name;
-        this.description = description;
-    }
 }

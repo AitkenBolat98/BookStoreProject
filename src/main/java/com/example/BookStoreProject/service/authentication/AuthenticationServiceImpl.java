@@ -54,10 +54,17 @@ public class AuthenticationServiceImpl implements AuthenticationService{
         Users user = userService.getByUserEmail(request.getEmail()).orElseThrow();
         String jwtToken = jwtService.generateToken(user);
         jwtService.revokeAllUserTokens(user);
-        saveUserToken(user,jwtToken);
+        var token = Token.builder()
+                .user(user)
+                .token(jwtToken)
+                .tokenType(TokenType.BEARER)
+                .expired(false)
+                .revoked(false)
+                .build();
+        jwtService.save(token);
         return AuthenticationDtoResponse
                 .builder()
-                .jwt(jwtToken)
+                .jwt(token.getToken())
                 .build();
     }
     @Override
@@ -69,13 +76,20 @@ public class AuthenticationServiceImpl implements AuthenticationService{
                 .createdAt(LocalDateTime.now())
                 .name(request.getName())
                 .build();
-        var savedUser = save(user);
+        this.save(user);
         var jwtToken = jwtService.generateToken(user);
-        saveUserToken(savedUser,jwtToken);
+        var token = Token.builder()
+                .user(user)
+                .token(jwtToken)
+                .tokenType(TokenType.BEARER)
+                .revoked(false)
+                .expired(false)
+                .build();
+        jwtService.save(token);
         return UserRegistrationDtoResponse.builder()
                 .email(user.getEmail())
                 .address(user.getAddress())
-                .jwt(jwtToken)
+                .jwt(token.getToken())
                 .build();
     }
     @Override
@@ -89,14 +103,5 @@ public class AuthenticationServiceImpl implements AuthenticationService{
             throw new RuntimeException("User not found");
         }
     }
-    private void saveUserToken(Users savedUser,String jwtToken){
-        var token = Token.builder()
-                .user(savedUser)
-                .token(jwtToken)
-                .tokenType(TokenType.BEARER)
-                .expired(false)
-                .revoked(false)
-                .build();
-        jwtService.save(token);
-    }
+
 }

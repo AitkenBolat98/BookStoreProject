@@ -37,8 +37,7 @@ public class BookStoreSecurityConfig {
     private final LogoutHandler logoutHandler;
     @Bean
     public SecurityFilterChain defaultSecurityFilterChain(HttpSecurity http) throws Exception{
-  /*      CsrfTokenRequestAttributeHandler requestAttributeHandler = new CsrfTokenRequestAttributeHandler();
-        requestAttributeHandler.setCsrfRequestAttributeName("_csrf");*/
+
         http.csrf((csrf)->csrf.disable())
                 .authorizeHttpRequests(requests -> requests.requestMatchers("/api/v1/auth/**")
                         .permitAll()
@@ -50,9 +49,8 @@ public class BookStoreSecurityConfig {
                 .addFilterBefore(jwtTokenGeneratorFilter, UsernamePasswordAuthenticationFilter.class)
                 .logout(l->l.logoutUrl("/api/v1/auth/logout")
                         .addLogoutHandler(logoutHandler).logoutSuccessHandler((request, response, authentication) ->
-                        SecurityContextHolder.clearContext()))
-                .addFilterAfter(new CsrfCookieFilter(),BasicAuthenticationFilter.class);
-        return http.build();
+                        SecurityContextHolder.clearContext()));
+    return http.build();
     }
     @Bean
     public AuthenticationManager authManager(HttpSecurity http) throws Exception{
