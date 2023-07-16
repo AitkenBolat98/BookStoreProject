@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Lazy;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -15,10 +16,12 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfiguration;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.authentication.logout.LogoutHandler;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 import org.springframework.security.web.csrf.CsrfTokenRequestAttributeHandler;
@@ -31,21 +34,26 @@ public class BookStoreSecurityConfig {
     private ProjectAuthenticationProvider authenticationProvider;
 
     private final JWTTokenGeneratorFilter jwtTokenGeneratorFilter;
+
+    private final LogoutHandler logoutHandler;
     @Bean
     public SecurityFilterChain defaultSecurityFilterChain(HttpSecurity http) throws Exception{
-        CsrfTokenRequestAttributeHandler requestAttributeHandler = new CsrfTokenRequestAttributeHandler();
-        requestAttributeHandler.setCsrfRequestAttributeName("_csrf");
-        http.csrf((csrf)->csrf.disable())
-                .authorizeHttpRequests(requests -> requests.requestMatchers("/api/v1/auth/**","/api/v1/user/changepassword")
-                        .permitAll()
+
+        http
+                .csrf((csrf)->csrf.disable())
+                .authorizeHttpRequests((requests) -> requests
+                        .requestMatchers(HttpMethod.POST,"/api/v1/auth/**" ).permitAll()
+                        .requestMatchers(HttpMethod.GET,"/api/v1/csrf").permitAll()
                         .anyRequest()
                         .authenticated()
                 ).sessionManagement(session -> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authenticationProvider(authenticationProvider)
                 .addFilterBefore(jwtTokenGeneratorFilter, UsernamePasswordAuthenticationFilter.class)
-                .addFilterAfter(new CsrfCookieFilter(),BasicAuthenticationFilter.class);
-        return http.build();
+                .logout(l->l.logoutUrl("/api/v1/auth/logout")
+                        .addLogoutHandler(logoutHandler).logoutSuccessHandler((request, response, authentication) ->
+                        SecurityContextHolder.clearContext()));
+    return http.build();
     }
     @Bean
     public AuthenticationManager authManager(HttpSecurity http) throws Exception{

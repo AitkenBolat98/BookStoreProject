@@ -59,7 +59,8 @@ public class Users implements UserDetails {
             columnDefinition = "TIMESTAMP WITHOUT TIME ZONE")
     private LocalDateTime createdAt;
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user",
+                cascade = {CascadeType.PERSIST,CascadeType.REMOVE})
     private List<Reviews> reviews;
 
     @OneToMany(
@@ -80,10 +81,15 @@ public class Users implements UserDetails {
             mappedBy = "user"
     )
     private List<Orders> orders;
-    @OneToOne(
+    @OneToOne(cascade = {CascadeType.PERSIST,CascadeType.REMOVE},
             mappedBy = "user"
     )
     private ResetPassword resetPassword;
+    @OneToMany(
+            cascade = {CascadeType.PERSIST,CascadeType.REMOVE},
+            mappedBy = "user"
+    )
+    private List<Token> tokens = new ArrayList<>();
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

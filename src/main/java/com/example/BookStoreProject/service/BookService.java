@@ -1,7 +1,9 @@
 package com.example.BookStoreProject.service;
 
+import com.example.BookStoreProject.dto.response.books.BooksSearchDtoResponse;
 import com.example.BookStoreProject.module.Books;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 

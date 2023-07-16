@@ -1,7 +1,9 @@
 package com.example.BookStoreProject.module;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
@@ -10,6 +12,8 @@ import java.time.LocalDateTime;
 @Table(name = "liked")
 @Getter
 @Setter
+@AllArgsConstructor
+@NoArgsConstructor
 public class Liked {
     @EmbeddedId
     private LikedId id = new LikedId();

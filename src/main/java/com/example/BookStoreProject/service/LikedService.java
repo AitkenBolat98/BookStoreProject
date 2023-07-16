@@ -10,7 +10,7 @@ import java.util.Optional;
 
 public interface LikedService {
 
-    LikedDtoResponse liked(LikedDtoRequest request, Principal principal);
+    void liked(LikedDtoRequest request, Principal principal);
 
     void deleteLikedBook(Principal principal,Long id);
 

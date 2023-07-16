@@ -1,9 +1,11 @@
 package com.example.BookStoreProject.module;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,18 +14,9 @@ import java.util.List;
 @Table(name = "books")
 @Getter
 @Setter
+@AllArgsConstructor
 @NoArgsConstructor
 public class Books {
-    public Books(Long id, String title, String genre, Double price, Integer quantity, String language, String bookDescription, Publishers publisher) {
-        this.id = id;
-        this.title = title;
-        this.genre = genre;
-        this.price = price;
-        this.quantity = quantity;
-        this.language = language;
-        this.bookDescription = bookDescription;
-        this.publisher = publisher;
-    }
 
     @Id
     @SequenceGenerator( name = "book_sequence",
@@ -64,25 +57,17 @@ public class Books {
             columnDefinition = "TEXT")
     private String bookDescription;
 
-    @OneToMany(cascade = {CascadeType.PERSIST,CascadeType.REMOVE},
-            mappedBy = "book")
+    @OneToMany(mappedBy = "book")
     private List<Liked> userLikedBook = new ArrayList<>();
 
-    @OneToMany(cascade = {CascadeType.PERSIST,CascadeType.REMOVE},
-            mappedBy = "book")
+    @OneToMany(mappedBy = "book")
     private List<Carts> userAddedBookToCart = new ArrayList<>();
 
     @OneToMany(mappedBy = "book")
     private List<Reviews> reviews;
-
-    @ManyToMany(cascade = CascadeType.ALL)
-    @JoinTable(name = "books_and_authors"
-                ,joinColumns = {
-            @JoinColumn(name = "book_id")
-    },inverseJoinColumns = {
-            @JoinColumn(name = "author_id")
-    })
-    private List<Authors> authors;
+    @OneToMany(cascade = CascadeType.ALL,
+                mappedBy = "books")
+    private List<BooksAndAuthors> booksAndAuthors = new ArrayList<>();
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "publisher_id",

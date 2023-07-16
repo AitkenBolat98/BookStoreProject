@@ -47,9 +47,7 @@ public class UserServiceImpl implements UserService {
     public UserPreviousOrdersDtoResponse previousOrders(Principal principal) {
 
         Users user = usersRepository.findByEmail(principal.getName()).orElseThrow();
-        System.out.println("GOOD!!");
         List<Orders> previous = user.getOrders();
-        System.out.println("GOOD!!");
 
         UserPreviousOrdersDtoResponse userPreviousOrdersDtoResponse = new UserPreviousOrdersDtoResponse();
         userPreviousOrdersDtoResponse.setOrders(user.getOrders().get(0));

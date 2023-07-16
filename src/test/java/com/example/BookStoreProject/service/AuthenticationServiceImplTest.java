@@ -3,7 +3,6 @@ package com.example.BookStoreProject.service;
 import com.example.BookStoreProject.dto.request.authentication.UserRegistrationDtoRequest;
 import com.example.BookStoreProject.module.Users;
 import com.example.BookStoreProject.repository.UsersRepository;
-import com.example.BookStoreProject.service.authentication.RegistrationServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

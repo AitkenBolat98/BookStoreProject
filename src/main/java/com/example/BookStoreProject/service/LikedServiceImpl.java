@@ -30,7 +30,7 @@ public class LikedServiceImpl implements LikedService{
         return likedRepository.save(liked);
     }
     @Override
-    public LikedDtoResponse liked(LikedDtoRequest request, Principal principal) {
+    public void liked(LikedDtoRequest request, Principal principal) {
         Liked liked = new Liked();
         try {
             String email = principal.getName();
@@ -45,9 +45,6 @@ public class LikedServiceImpl implements LikedService{
             log.error(e.getMessage());
             throw new RuntimeException("Liked creation exception");
         }
-        return LikedDtoResponse.builder()
-                .bookId(liked.getBook().getId())
-                .build();
     }
 
     @Override

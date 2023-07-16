@@ -1,7 +1,9 @@
 package com.example.BookStoreProject.module;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.ArrayList;
@@ -11,6 +13,8 @@ import java.util.List;
 @Table(name = "authors")
 @Getter
 @Setter
+@AllArgsConstructor
+@NoArgsConstructor
 public class Authors {
     @Id
     @SequenceGenerator(
@@ -37,12 +41,10 @@ public class Authors {
             columnDefinition = "TEXT")
     private String authorDescription;
 
-    @ManyToMany(mappedBy = "authors",cascade = CascadeType.ALL)
-    private List<Books> books = new ArrayList<>();
+    @OneToMany(
+            cascade = CascadeType.ALL,
+            mappedBy = "author"
+    )
+    private List<BooksAndAuthors> booksAndAuthors = new ArrayList<>();
 
-    public Authors(String name, String authorDescription, List<Books> books) {
-        this.name = name;
-        this.authorDescription = authorDescription;
-        this.books = books;
-    }
 }

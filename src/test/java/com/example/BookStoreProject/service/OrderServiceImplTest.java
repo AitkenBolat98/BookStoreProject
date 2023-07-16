@@ -3,7 +3,6 @@ package com.example.BookStoreProject.service;
 import com.example.BookStoreProject.dto.request.orders.OrderCreationDtoRequest;
 import com.example.BookStoreProject.module.Orders;
 import com.example.BookStoreProject.repository.OrdersRepository;
-import com.example.BookStoreProject.service.authentication.RegistrationService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

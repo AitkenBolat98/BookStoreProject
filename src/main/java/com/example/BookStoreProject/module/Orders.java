@@ -3,6 +3,7 @@ package com.example.BookStoreProject.module;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
@@ -12,6 +13,8 @@ import java.time.LocalDateTime;
 @Table(name = "orders")
 @Getter
 @Setter
+@AllArgsConstructor
+@NoArgsConstructor
 public class Orders {
     @Id
     @SequenceGenerator( name = "order_sequence",
@@ -48,8 +51,7 @@ public class Orders {
     )
     private Users user;
 
-    @ManyToOne(cascade = {CascadeType.PERSIST,CascadeType.REMOVE},
-            fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "book_id",
             referencedColumnName = "id")
     private Books book;

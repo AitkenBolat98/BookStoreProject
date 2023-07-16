@@ -1,7 +1,9 @@
 package com.example.BookStoreProject.module;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
@@ -10,6 +12,8 @@ import java.time.LocalDateTime;
 @Table(name = "reset_password")
 @Getter
 @Setter
+@AllArgsConstructor
+@NoArgsConstructor
 public class ResetPassword {
     private static final int EXPIRATION = 24*60;
 
