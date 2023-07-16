@@ -11,13 +11,12 @@ import java.util.Set;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping(value = "/api/v1/books",
-                produces = {"application/json"})
+@RequestMapping(value = "/api/v1/books")
 public class BookController {
 
     private final BookService bookService;
     @GetMapping("/search")
-    public ResponseEntity<BooksSearchDtoResponse> searchBook(@RequestParam(value = "query",defaultValue = "a") String query){
+    public ResponseEntity<Set<Books>> searchBook(@RequestParam(value = "query") String query){
         return ResponseEntity.ok(bookService.searchBooks(query));
     }
 }

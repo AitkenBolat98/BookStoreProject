@@ -26,16 +26,13 @@ public class BookServiceImpl implements BookService{
     }
 
     @Override
-    public BooksSearchDtoResponse searchBooks(String query) {
+    public Set<Books> searchBooks(String query) {
         List<Books> booksTitle = booksRepository.searchBookByTitle(query);
         List<Books> booksGenre = booksRepository.searchBookByGenre(query);
-/*
         List<Books> booksAuthor = booksRepository.searchByAuthor(query);
-*/
-        Set<Books> books = Stream.of(booksTitle,booksGenre/*,booksAuthor*/).flatMap(Collection::stream).collect(Collectors.toSet());
-        return BooksSearchDtoResponse.builder()
-                .foundBooks(books)
-                .build();
+        Set<Books> books = Stream.of(booksTitle,booksGenre,booksAuthor)
+                .flatMap(Collection::stream).collect(Collectors.toSet());
+        return books;
     }
 
     public Books save(Books book){

@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -68,7 +69,7 @@ public class Books {
                 mappedBy = "books")
     private List<BooksAndAuthors> booksAndAuthors = new ArrayList<>();
 
-    @ManyToOne(/*fetch = FetchType.LAZY*/)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "publisher_id",
             nullable = false,
             referencedColumnName = "id",
