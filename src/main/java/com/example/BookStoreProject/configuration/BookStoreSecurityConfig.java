@@ -1,5 +1,6 @@
 package com.example.BookStoreProject.configuration;
 
+import com.example.BookStoreProject.constants.Roles;
 import com.example.BookStoreProject.filter.CsrfCookieFilter;
 import com.example.BookStoreProject.filter.JWTTokenGeneratorFilter;
 import com.example.BookStoreProject.filter.JWTTokenValidatorFilter;
@@ -26,6 +27,10 @@ import org.springframework.security.web.authentication.www.BasicAuthenticationFi
 import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 import org.springframework.security.web.csrf.CsrfTokenRequestAttributeHandler;
 
+import static com.example.BookStoreProject.constants.Permissions.*;
+import static com.example.BookStoreProject.constants.Roles.ADMIN;
+import static com.example.BookStoreProject.constants.Roles.MANAGER;
+
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
@@ -42,8 +47,32 @@ public class BookStoreSecurityConfig {
         http
                 .csrf((csrf)->csrf.disable())
                 .authorizeHttpRequests((requests) -> requests
-                        .requestMatchers(HttpMethod.POST,"/api/v1/auth/**" ).permitAll()
-                        .requestMatchers(HttpMethod.GET,"/api/v1/csrf").permitAll()
+                        .requestMatchers(HttpMethod.POST,"/api/v1/auth/**" )
+                        .permitAll()
+                        .requestMatchers(HttpMethod.GET,"/api/v1/csrf")
+                        .permitAll()
+                        .requestMatchers("/api/v1/management/**").hasAnyRole(ADMIN.name(), MANAGER.name())
+
+                        .requestMatchers(HttpMethod.GET,"/api/v1/management/**")
+                        .hasAnyAuthority(ADMIN_READ.name(),MANAGER_READ.name())
+                        .requestMatchers(HttpMethod.POST,"/api/v1/management/**")
+                        .hasAnyAuthority(ADMIN_CREATE.name(),MANAGER_CREATE.name())
+                        .requestMatchers(HttpMethod.DELETE,"/api/v1/management/**")
+                        .hasAnyAuthority(ADMIN_DELETE.name(),MANAGER_DELETE.name())
+                        .requestMatchers(HttpMethod.PUT,"/api/v1/management/**")
+                        .hasAnyAuthority(ADMIN_UPDATE.name(),MANAGER_UPDATE.name())
+
+                        .requestMatchers("/api/v1/admin/**").hasRole(ADMIN.name())
+
+                        .requestMatchers(HttpMethod.GET,"/api/v1/admin/**")
+                        .hasAuthority(ADMIN_READ.name())
+                        .requestMatchers(HttpMethod.POST,"/api/v1/admin/**")
+                        .hasAuthority(ADMIN_CREATE.name())
+                        .requestMatchers(HttpMethod.DELETE,"/api/v1/admin/**")
+                        .hasAuthority(ADMIN_DELETE.name())
+                        .requestMatchers(HttpMethod.PUT,"/api/v1/admin/**")
+                        .hasAuthority(ADMIN_UPDATE.name())
+
                         .anyRequest()
                         .authenticated()
                 ).sessionManagement(session -> session

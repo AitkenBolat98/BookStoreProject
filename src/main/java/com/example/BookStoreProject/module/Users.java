@@ -1,5 +1,6 @@
 package com.example.BookStoreProject.module;
 
+import com.example.BookStoreProject.constants.Roles;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
@@ -91,9 +92,10 @@ public class Users implements UserDetails {
     )
     private List<Token> tokens = new ArrayList<>();
 
+    private Roles roles;
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return null;
+        return roles.getAuthorities();
     }
 
     @Override
