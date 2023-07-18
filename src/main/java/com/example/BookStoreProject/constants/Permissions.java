@@ -1,8 +1,10 @@
 package com.example.BookStoreProject.constants;
 
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
+@Getter
 public enum Permissions {
     
     USER_READ("user:read"),

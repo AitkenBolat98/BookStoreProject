@@ -65,10 +65,17 @@ public class Books {
 
     @OneToMany(mappedBy = "book")
     private List<Reviews> reviews;
-    @OneToMany(cascade = CascadeType.ALL,
-                mappedBy = "books")
-    private List<BooksAndAuthors> booksAndAuthors = new ArrayList<>();
 
+    @ManyToMany
+    @JoinTable(
+            name = "books_and_authors",
+            joinColumns = @JoinColumn(
+                    name = "book_id"
+            ),
+            inverseJoinColumns = @JoinColumn(
+                    name = "author_id"
+            ))
+    private List<Authors> authors;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "publisher_id",
             nullable = false,

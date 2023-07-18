@@ -13,6 +13,7 @@ import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfiguration;
@@ -28,12 +29,12 @@ import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 import org.springframework.security.web.csrf.CsrfTokenRequestAttributeHandler;
 
 import static com.example.BookStoreProject.constants.Permissions.*;
-import static com.example.BookStoreProject.constants.Roles.ADMIN;
-import static com.example.BookStoreProject.constants.Roles.MANAGER;
+import static com.example.BookStoreProject.constants.Roles.*;
 
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
+@EnableMethodSecurity
 public class BookStoreSecurityConfig {
     @Autowired
     private ProjectAuthenticationProvider authenticationProvider;
@@ -51,6 +52,7 @@ public class BookStoreSecurityConfig {
                         .permitAll()
                         .requestMatchers(HttpMethod.GET,"/api/v1/csrf")
                         .permitAll()
+
                         .requestMatchers("/api/v1/management/**").hasAnyRole(ADMIN.name(), MANAGER.name())
 
                         .requestMatchers(HttpMethod.GET,"/api/v1/management/**")

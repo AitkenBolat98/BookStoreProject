@@ -41,10 +41,8 @@ public class Authors {
             columnDefinition = "TEXT")
     private String authorDescription;
 
-    @OneToMany(
-            cascade = CascadeType.ALL,
-            mappedBy = "author"
+    @ManyToMany(
+            mappedBy = "authors"
     )
-    private List<BooksAndAuthors> booksAndAuthors = new ArrayList<>();
-
+    private List<Books> books;
 }

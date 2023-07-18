@@ -91,7 +91,6 @@ public class Users implements UserDetails {
             mappedBy = "user"
     )
     private List<Token> tokens = new ArrayList<>();
-
     private Roles roles;
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
