@@ -1,7 +1,8 @@
 package com.example.BookStoreProject.service;
 
-import com.example.BookStoreProject.dto.request.manager.BookCreateDtoRequest;
+import com.example.BookStoreProject.dto.request.manager.*;
 import com.example.BookStoreProject.module.Books;
+import org.springframework.security.core.parameters.P;
 
 import java.security.Principal;
 import java.util.List;
@@ -17,4 +18,11 @@ public interface BookService {
     void updateBooks(Long id,Integer quantity);
 
     void createBooks(Principal principal, List<BookCreateDtoRequest> requests);
+    void updateBookQuantity(Principal principal, BookUpdateQuantityDtoRequest request);
+    void updateBookPrice(Principal principal, BookUpdatePriceDtoRequest request);
+    void updateBookDescription(Principal principal, BookUpdateDescriptionDtoRequest request);
+    void updateBookLanguage(Principal principal, BookUpdateLanguageDtoRequest request);
+    void deleteBook(Principal principal, BookDeleteDtoRequest request);
+    void updateBookTitle(Principal principal,BookUpdateTitleDtoRequest request);
+    void updateBookGenre(Principal principal,BookUpdateGenreDtoRequest request);
 }

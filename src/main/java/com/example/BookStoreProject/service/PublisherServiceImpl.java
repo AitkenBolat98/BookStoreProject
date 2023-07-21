@@ -15,4 +15,18 @@ public class PublisherServiceImpl implements PublisherService{
     public Publishers getByName(String publisher) {
         return publishersRepository.findByName(publisher);
     }
+
+    @Override
+    public Publishers assignPublisherToBook(String publisher) {
+        if(this.getByName(publisher) == null){
+            Publishers newPublisher = new Publishers();
+            newPublisher.setName(publisher);
+            newPublisher.setDescription(null);
+            newPublisher.setPublisherBooks(null);
+            return newPublisher;
+        }else{
+            Publishers existingPublisher = this.getByName(publisher);
+            return existingPublisher;
+        }
+    }
 }
