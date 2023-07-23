@@ -1,16 +1,18 @@
 package com.example.BookStoreProject.service;
 
-import com.example.BookStoreProject.dto.response.books.BooksSearchDtoResponse;
+import com.example.BookStoreProject.dto.request.manager.BookCreateDtoRequest;
+import com.example.BookStoreProject.module.Authors;
 import com.example.BookStoreProject.module.Books;
+import com.example.BookStoreProject.module.Publishers;
+import com.example.BookStoreProject.module.Users;
 import com.example.BookStoreProject.repository.BooksRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import java.util.Collection;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.security.Principal;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -20,6 +22,10 @@ import java.util.stream.Stream;
 public class BookServiceImpl implements BookService{
 
     private final BooksRepository booksRepository;
+    private final UserService userService;
+
+    private final AuthorService authorService;
+    private final PublisherService publisherService;
     @Override
     public Optional<Books> getById(Long id) {
         return booksRepository.findById(id);
@@ -49,5 +55,37 @@ public class BookServiceImpl implements BookService{
             log.error(e.getMessage());
             throw new RuntimeException("Book Update exception");
         }
+    }
+
+    @Override
+    public void createBooks(Principal principal, List<BookCreateDtoRequest> requests) {
+        Users user = userService.getByUserEmail(principal.getName()).orElseThrow();
+        for(BookCreateDtoRequest request:requests){
+            Publishers publisher = publisherService.getByName(request.getPublisher());
+            Books book = new Books();
+            book.setTitle(request.getTitle());
+            book.setQuantity(request.getQuantity());
+            book.setBookDescription(request.getBookDescription());
+            book.setGenre(request.getGenre());
+            book.setLanguage(request.getLanguage());
+            book.setAuthors(assignAuthorsToBook(request.getAuthorsList()));
+            book.setPublisher(publisher);
+
+        }
+    }
+    public List<Authors> assignAuthorsToBook(List<String> authorList){
+        ArrayList<Authors> authorsArray = new ArrayList<>();
+        for(String author:authorList){
+            if(authorService.getByName(author) == null){
+                Authors newAuthor = new Authors();
+                newAuthor.setAuthorDescription(null);
+                newAuthor.setName(author);
+                newAuthor.setBooks(null);
+                authorsArray.add(newAuthor);
+            }else{
+                authorsArray.add(authorService.getByName(author));
+            }
+        }
+        return authorsArray;
     }
 }

@@ -18,5 +18,7 @@ public class UserRegistrationDtoRequest {
     private String name;
 
     private String address;
+    @NotNull
+    private String role;
 
 }

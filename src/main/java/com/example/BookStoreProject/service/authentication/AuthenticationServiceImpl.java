@@ -1,5 +1,6 @@
 package com.example.BookStoreProject.service.authentication;
 
+import com.example.BookStoreProject.constants.Roles;
 import com.example.BookStoreProject.constants.TokenType;
 import com.example.BookStoreProject.dto.request.authentication.AuthenticationDtoRequest;
 import com.example.BookStoreProject.dto.request.authentication.UserRegistrationDtoRequest;
@@ -24,7 +25,10 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import javax.management.relation.Role;
 import java.time.LocalDateTime;
+
+import static com.example.BookStoreProject.constants.Roles.*;
 
 @Service
 @RequiredArgsConstructor
@@ -72,6 +76,7 @@ public class AuthenticationServiceImpl implements AuthenticationService{
         var user = Users.builder()
                 .email(request.getEmail())
                 .password(passwordEncoder.encode(request.getPassword()))
+                .roles(assignRole(request.getRole().toUpperCase()))
                 .address(request.getAddress())
                 .createdAt(LocalDateTime.now())
                 .name(request.getName())
@@ -101,6 +106,15 @@ public class AuthenticationServiceImpl implements AuthenticationService{
             userService.save(user);
         }else{
             throw new RuntimeException("User not found");
+        }
+    }
+    public Roles assignRole(String role){
+        if(role.equals("ADMIN")){
+            return ADMIN;
+        } else if (role.equals("MANAGER")) {
+            return MANAGER;
+        }else {
+            return USER;
         }
     }
 
