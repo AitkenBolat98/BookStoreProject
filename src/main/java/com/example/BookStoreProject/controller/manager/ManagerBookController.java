@@ -1,11 +1,10 @@
-package com.example.BookStoreProject.controller.Manager;
+package com.example.BookStoreProject.controller.manager;
 
-import com.example.BookStoreProject.dto.request.manager.*;
+import com.example.BookStoreProject.dto.request.manager.book.*;
 import com.example.BookStoreProject.service.BookService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.parameters.P;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
@@ -13,7 +12,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping(
-        value = "/api/v1/management/books/",
+        value = "/api/v1/management/books",
         consumes = "application/json")
 @RequiredArgsConstructor
 public class ManagerBookController {

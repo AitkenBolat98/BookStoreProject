@@ -1,11 +1,12 @@
 package com.example.BookStoreProject.service;
 
-import com.example.BookStoreProject.dto.request.manager.*;
+import com.example.BookStoreProject.dto.request.manager.book.*;
 import com.example.BookStoreProject.module.Books;
 import com.example.BookStoreProject.module.Users;
 import com.example.BookStoreProject.repository.BooksRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -18,7 +19,7 @@ import java.util.stream.Stream;
 @RequiredArgsConstructor
 @Log4j2
 public class BookServiceImpl implements BookService{
-
+    @Autowired
     private final BooksRepository booksRepository;
     private final UserService userService;
 
@@ -68,6 +69,8 @@ public class BookServiceImpl implements BookService{
                 book.setAuthors(authorService.assignAuthorsToBook(request.getAuthorsList()));
                 book.setPublisher(publisherService.assignPublisherToBook(request.getPublisher()));
                 this.save(book);
+                authorService.assignBooksToAuthors(book);
+                publisherService.assignBooksToPublisher(book);
             }
         }catch (Exception e){
             log.error(e.getMessage());

@@ -12,4 +12,6 @@ import java.util.Optional;
 public interface AuthorsRepository extends JpaRepository<Authors,Long> {
     @Query(value = "SELECT a FROM authors a WHERE a.name = :authorName",nativeQuery = true)
     Authors findByName(@Param("authorName") String authorName);
+
+    Optional<Authors> findById(Long id);
 }

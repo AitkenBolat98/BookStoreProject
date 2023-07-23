@@ -1,4 +1,4 @@
-package com.example.BookStoreProject.dto.request.manager;
+package com.example.BookStoreProject.dto.request.manager.book;
 
 import lombok.Getter;
 import lombok.extern.java.Log;

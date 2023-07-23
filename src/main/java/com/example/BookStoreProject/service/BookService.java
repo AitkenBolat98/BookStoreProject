@@ -1,8 +1,7 @@
 package com.example.BookStoreProject.service;
 
-import com.example.BookStoreProject.dto.request.manager.*;
+import com.example.BookStoreProject.dto.request.manager.book.*;
 import com.example.BookStoreProject.module.Books;
-import org.springframework.security.core.parameters.P;
 
 import java.security.Principal;
 import java.util.List;
@@ -24,5 +23,6 @@ public interface BookService {
     void updateBookLanguage(Principal principal, BookUpdateLanguageDtoRequest request);
     void deleteBook(Principal principal, BookDeleteDtoRequest request);
     void updateBookTitle(Principal principal,BookUpdateTitleDtoRequest request);
-    void updateBookGenre(Principal principal,BookUpdateGenreDtoRequest request);
+    void updateBookGenre(Principal principal, BookUpdateGenreDtoRequest request);
+
 }
