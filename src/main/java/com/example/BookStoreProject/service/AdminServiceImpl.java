@@ -5,6 +5,7 @@ import com.example.BookStoreProject.module.Users;
 import com.example.BookStoreProject.repository.UsersRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.security.Principal;

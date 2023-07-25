@@ -3,6 +3,7 @@ package com.example.BookStoreProject.controller;
 import com.example.BookStoreProject.dto.request.orders.OrderCreationDtoRequest;
 import com.example.BookStoreProject.dto.response.orders.OrderCreationDtoResponse;
 import com.example.BookStoreProject.service.OrderService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,7 +23,7 @@ public class OrderController {
 
     @PostMapping("/order/create")
     @PreAuthorize("hasAuthority('user:create')")
-    public ResponseEntity<OrderCreationDtoResponse> createOrder(@RequestBody List<OrderCreationDtoRequest> requests, Principal principal){
+    public ResponseEntity<OrderCreationDtoResponse> createOrder(@RequestBody @Valid List<OrderCreationDtoRequest> requests, Principal principal){
 
         return ResponseEntity.ok(orderService.createOrder(requests,principal));
     }

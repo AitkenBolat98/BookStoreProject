@@ -1,6 +1,7 @@
 package com.example.BookStoreProject.service;
 
 import com.example.BookStoreProject.dto.request.manager.book.*;
+import com.example.BookStoreProject.dto.response.books.BooksSearchDtoResponse;
 import com.example.BookStoreProject.module.Books;
 import com.example.BookStoreProject.module.Users;
 import com.example.BookStoreProject.repository.BooksRepository;
@@ -31,13 +32,16 @@ public class BookServiceImpl implements BookService{
     }
 
     @Override
-    public Set<Books> searchBooks(String query) {
+    public BooksSearchDtoResponse searchBooks(String query) {
         List<Books> booksTitle = booksRepository.searchBookByTitle(query);
         List<Books> booksGenre = booksRepository.searchBookByGenre(query);
         List<Books> booksAuthor = booksRepository.searchByAuthor(query);
         Set<Books> books = Stream.of(booksTitle,booksGenre,booksAuthor)
                 .flatMap(Collection::stream).collect(Collectors.toSet());
-        return books;
+        return BooksSearchDtoResponse
+                .builder()
+                .foundBooks(books)
+                .build();
     }
 
     public Books save(Books newBook){

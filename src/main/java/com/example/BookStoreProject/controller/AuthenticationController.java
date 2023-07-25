@@ -28,11 +28,11 @@ public class AuthenticationController {
         return ResponseEntity.ok(authenticationService.registration(request));
     }
     @PostMapping("/authenticate")
-    public ResponseEntity<AuthenticationDtoResponse> authenticate(@RequestBody AuthenticationDtoRequest request){
+    public ResponseEntity<AuthenticationDtoResponse> authenticate(@RequestBody @Valid AuthenticationDtoRequest request){
         return  ResponseEntity.ok(authenticationService.authenticate(request));
     }
     @PostMapping("/reset")
-    public ResponseEntity<UserPasswordResetDtoResponse> resetPassword(@RequestBody UserPasswordResetDtoRequest request){
+    public ResponseEntity<UserPasswordResetDtoResponse> resetPassword(@RequestBody @Valid UserPasswordResetDtoRequest request){
         return ResponseEntity.ok(userResetPasswordService.resetPassword(request));
     }
     @PostMapping("/changepassword")

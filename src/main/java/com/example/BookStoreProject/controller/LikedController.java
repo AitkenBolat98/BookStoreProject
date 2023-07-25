@@ -3,6 +3,7 @@ package com.example.BookStoreProject.controller;
 import com.example.BookStoreProject.dto.request.liked.LikedDtoRequest;
 import com.example.BookStoreProject.dto.response.liked.LikedDtoResponse;
 import com.example.BookStoreProject.service.LikedService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,7 +22,7 @@ public class LikedController {
 
     @PostMapping("/create")
     @PreAuthorize("hasAuthority('user:create')")
-    public ResponseEntity<HttpStatus> likeBook(@RequestBody LikedDtoRequest request, Principal principal){
+    public ResponseEntity<HttpStatus> likeBook(@RequestBody @Valid LikedDtoRequest request, Principal principal){
         likedService.liked(request,principal);
         return new ResponseEntity<>(HttpStatus.OK);
     }

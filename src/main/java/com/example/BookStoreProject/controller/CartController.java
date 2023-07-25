@@ -3,6 +3,7 @@ package com.example.BookStoreProject.controller;
 import com.example.BookStoreProject.dto.request.CartAddDtoRequest;
 import com.example.BookStoreProject.dto.response.CartAddDtoResponse;
 import com.example.BookStoreProject.service.CartService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,7 +22,7 @@ public class CartController {
 
     @PostMapping("/add")
     @PreAuthorize("hasAuthority('user:create')")
-    public ResponseEntity<CartAddDtoResponse> addToCart(@RequestBody CartAddDtoRequest request,Principal principal){
+    public ResponseEntity<CartAddDtoResponse> addToCart(@RequestBody @Valid CartAddDtoRequest request, Principal principal){
         return ResponseEntity.ok(cartService.addToCart(request,principal));
 
     }
