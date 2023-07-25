@@ -1,0 +1,86 @@
+package com.example.BookStoreProject.configuration;
+
+import com.example.BookStoreProject.filter.JWTTokenGeneratorFilter;
+import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.authentication.logout.LogoutHandler;
+
+import static com.example.BookStoreProject.constants.Permissions.*;
+import static com.example.BookStoreProject.constants.Roles.*;
+
+@Configuration
+@EnableWebSecurity
+@RequiredArgsConstructor
+@EnableMethodSecurity
+public class BookStoreSecurityConfig {
+    @Autowired
+    private ProjectAuthenticationProvider authenticationProvider;
+
+    private final JWTTokenGeneratorFilter jwtTokenGeneratorFilter;
+
+    private final LogoutHandler logoutHandler;
+    @Bean
+    public SecurityFilterChain defaultSecurityFilterChain(HttpSecurity http) throws Exception{
+
+        http
+                .csrf((csrf)->csrf.disable())
+                .authorizeHttpRequests((requests) -> requests
+                        .requestMatchers(HttpMethod.POST,"/api/v1/auth/**" )
+                        .permitAll()
+                        .requestMatchers(HttpMethod.GET,"/api/v1/csrf")
+                        .permitAll()
+
+                        .requestMatchers("/api/v1/management/**").hasAnyRole(ADMIN.name(), MANAGER.name())
+
+                        .requestMatchers(HttpMethod.GET,"/api/v1/management/**")
+                        .hasAnyAuthority(ADMIN_READ.name(),MANAGER_READ.name())
+                        .requestMatchers(HttpMethod.POST,"/api/v1/management/**")
+                        .hasAnyAuthority(ADMIN_CREATE.name(),MANAGER_CREATE.name())
+                        .requestMatchers(HttpMethod.DELETE,"/api/v1/management/**")
+                        .hasAnyAuthority(ADMIN_DELETE.name(),MANAGER_DELETE.name())
+                        .requestMatchers(HttpMethod.PUT,"/api/v1/management/**")
+                        .hasAnyAuthority(ADMIN_UPDATE.name(),MANAGER_UPDATE.name())
+
+                        .requestMatchers("/api/v1/admin/**").hasRole(ADMIN.name())
+
+                        .requestMatchers(HttpMethod.GET,"/api/v1/admin/**")
+                        .hasAuthority(ADMIN_READ.name())
+                        .requestMatchers(HttpMethod.POST,"/api/v1/admin/**")
+                        .hasAuthority(ADMIN_CREATE.name())
+                        .requestMatchers(HttpMethod.DELETE,"/api/v1/admin/**")
+                        .hasAuthority(ADMIN_DELETE.name())
+                        .requestMatchers(HttpMethod.PUT,"/api/v1/admin/**")
+                        .hasAuthority(ADMIN_UPDATE.name())
+
+                        .anyRequest()
+                        .authenticated()
+                ).sessionManagement(session -> session
+                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .authenticationProvider(authenticationProvider)
+                .addFilterBefore(jwtTokenGeneratorFilter, UsernamePasswordAuthenticationFilter.class)
+                .logout(l->l.logoutUrl("/api/v1/auth/logout")
+                        .addLogoutHandler(logoutHandler).logoutSuccessHandler((request, response, authentication) ->
+                        SecurityContextHolder.clearContext()));
+    return http.build();
+    }
+    @Bean
+    public AuthenticationManager authManager(HttpSecurity http) throws Exception{
+        AuthenticationManagerBuilder authenticationManagerBuilder
+                = http.getSharedObject(AuthenticationManagerBuilder.class);
+        authenticationManagerBuilder.authenticationProvider(authenticationProvider);
+        return authenticationManagerBuilder.build();
+    }
+
+}
