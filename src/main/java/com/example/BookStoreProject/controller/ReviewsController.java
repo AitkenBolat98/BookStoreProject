@@ -5,6 +5,7 @@ import com.example.BookStoreProject.dto.request.reviews.ReviewsUpdateDtoRequest;
 import com.example.BookStoreProject.dto.response.reviews.ReviewsCreateDtoResponse;
 import com.example.BookStoreProject.dto.response.reviews.ReviewsUpdateDtoResponse;
 import com.example.BookStoreProject.service.ReviewsService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,7 +23,7 @@ public class ReviewsController {
     private final ReviewsService reviewsService;
     @PostMapping("/create")
     @PreAuthorize("hasAuthority('user:create')")
-    public ResponseEntity<ReviewsCreateDtoResponse> createReview(@RequestBody ReviewsCreateDtoRequest request, Principal principal){
+    public ResponseEntity<ReviewsCreateDtoResponse> createReview(@RequestBody @Valid ReviewsCreateDtoRequest request, Principal principal){
         return ResponseEntity.ok(reviewsService.create(request,principal));
     }
     @DeleteMapping("/delete/{id}")
@@ -33,7 +34,7 @@ public class ReviewsController {
     }
     @PutMapping("/update")
     @PreAuthorize("hasAuthority('user:update')")
-    public ResponseEntity<ReviewsUpdateDtoResponse> updateReview(@RequestBody ReviewsUpdateDtoRequest request,Principal principal){
+    public ResponseEntity<ReviewsUpdateDtoResponse> updateReview(@RequestBody @Valid ReviewsUpdateDtoRequest request,Principal principal){
         return ResponseEntity.ok(reviewsService.update(request,principal));
     }
 
